@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="utf-8"/><title>第 5 章</title></head>
+<body>
+<h1>第 5 章 OMC 入门：多智能体定义与路由</h1>
+
+<p>oh-my-claudecode(OMC)是一个 Claude Code 插件，把单个 AI 会话升级成一支"虚拟团队"。本章介绍它的角色分工与路由逻辑。</p>
+
+<h2>5.1 OMC 是什么</h2>
+
+<p>OMC 的核心思想：<strong>作者和审查者分离，规划和执行分离</strong>。主会话作为"指挥官"不亲自下场写代码，而是把工作路由给专职 Agent，每个 Agent 用适合其任务的模型档位运行：</p>
+
+<table>
+<tr><th>角色</th><th>Agent</th><th>模型档位</th><th>职责</th></tr>
+<tr><td>规划</td><td>planner / architect</td><td>Opus</td><td>把模糊需求变成可执行计划</td></tr>
+<tr><td>执行</td><td>executor</td><td>Sonnet</td><td>按计划实现，复杂任务可上调</td></tr>
+<tr><td>审查</td><td>code-reviewer / critic</td><td>Opus</td><td>独立审查，不和作者混用上下文</td></tr>
+<tr><td>验证</td><td>verifier</td><td>按规模选档</td><td>用证据确认"真的做完了"</td></tr>
+</table>
+
+<p>除此之外还有专家位：debugger(根因分析)、tracer(证据驱动的调用链追踪)、test-engineer、document-specialist(查外部文档)、designer、writer、git-master、explore 探索位，以及游戏项目里的"配置策划"子智能体(负责 Excel 配置表操作)。</p>
+
+<h2>5.2 模型路由：好钢用在刀刃上</h2>
+
+<p>OMC 的原则是"按任务难度配算力"：</p>
+
+<ul>
+<li><strong>haiku</strong>：查路径、改文案这类秒级任务；</li>
+<li><strong>sonnet</strong>：标准实现、常规改动；</li>
+<li><strong>opus</strong>：架构分析、深度审查、疑难调试；</li>
+<li><strong>fable</strong>：最难的问题。</li>
+</ul>
+
+<p>对话里直接说"用 opus 深入分析"即可覆盖默认路由。</p>
+
+<h2>5.3 标准协作流程</h2>
+
+<p>一个完整的 OMC 委派长这样：</p>
+
+<pre><code>你: 用 plan 模式调研"聊天撤回"需求，输出计划
+AI: 派 planner/architect 出方案 → 你确认方案,不是确认细节
+你: 执行这个计划
+AI: 派 executor 实现 → 派 code-reviewer 发现2处中等问题 → executor 修复
+AI: 派 verifier 收集测试/构建证据 → 汇报
+你: 验收 + 决定是否提交</code></pre>
+
+<p>关键设计：<strong>审查者不复用作者的上下文</strong>。executor 写完的代码，由一个没有"作者滤镜"的 code-reviewer 在独立上下文里重新读一遍。这解决了单体 AI"自己写自己夸"的问题。</p>
+
+<h2>5.4 什么时候不编排</h2>
+
+<p>编排有开销(多智能体各带一份上下文，更慢更贵)。简单任务直接让主会话干反而快。经验阈值：</p>
+
+<ul>
+<li>改动 ≤ 3 个文件、一次对话能完成 → 主会话直接干；</li>
+<li>多文件/重构/疑难 debug/需要独立审查 → 编排；</li>
+<li>整条链路你都不用盯 → 用第 7 章的自主模式。</li>
+</ul>
+
+<h2>5.5 安装与检查</h2>
+
+<pre><code>/plugin install oh-my-claudecode      # 插件市场安装
+/oh-my-claudecode:omc-setup           # 刷新安装与配置
+/oh-my-claudecode:omc-doctor          # 诊断安装问题
+/oh-my-claudecode:cancel              # 取消任何正在运行的 OMC 模式
+DISABLE_OMC=1                         # 环境变量开关,一键停用</code></pre>
+
+</body>
+</html>
