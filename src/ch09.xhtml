@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="utf-8"/><title>第 9 章</title></head>
+<body>
+<h1>第 9 章 持续进化的闭环</h1>
+
+<p>前面章节的零件都齐了。本章把它们组装成一个可运转的"进化系统"：<strong>反馈 → 记忆 → 技能 → 工作流固化</strong>。</p>
+
+<h2>9.1 进化闭环的四个环节</h2>
+
+<p>把指挥、记忆、编排、沉淀四个机制连成一个环：</p>
+
+<pre><code>干活(委派/编排/自主模式)
+  ↓
+反馈(验收中发现问题,或说"不对,应该……")
+  ↓
+沉淀(第二遍记忆 / 30分钟复盘进 wiki / 第三遍 skillify)
+  ↓
+下一轮自动生效(记忆自动读取,技能直接调用)
+  ↓
+干活 ……</code></pre>
+
+<p>判断你的体系是否在进化，看两个信号：</p>
+
+<ol>
+<li><strong>重复解释变少</strong>：同一个纠偏你说第二遍时，AI 应该已经记住了；</li>
+<li><strong>流程重放</strong>：以前手工走的流程，现在一句话重放。</li>
+</ol>
+
+<h2>9.2 三种时间尺度的"学习"</h2>
+
+<table>
+<tr><th>时间尺度</th><th>机制</th><th>动作</th></tr>
+<tr><td>会话内</td><td>上下文 + 纠偏</td><td>Esc 打断、双击 Esc 回退、当场纠正</td></tr>
+<tr><td>会话间</td><td>五层记忆体系(第 4 章)</td><td>说"记住:……"或跑 remember 分类决策</td></tr>
+<tr><td>长期</td><td>skillify / wiki / CLAUDE.md 修订</td><td>把流程固化,把规则修订进文件</td></tr>
+</table>
+
+<h2>9.3 进化日志模板</h2>
+
+<p>建议每次"值得记的反馈"都追加一条日志(可放 wiki 的 session-log 类别)：</p>
+
+<pre><code>## 2026-10-11  背包断线重连 bug
+- 现象: 重连后物品数量显示错误
+- 根因: 配置读取没走缓存层
+- 纠偏: "修 bug 先追踪完整调用链再修" —— 已写入 CLAUDE.md
+- 沉淀: wiki/debugging-backpack-reconnect.md</code></pre>
+
+<p>三个信号说明你没有在进化：</p>
+
+<ul>
+<li>同一个纠偏说第三遍还不生效 → 记忆层选错了，检查该进 CLAUDE.md 的规则是不是进了 wiki；</li>
+<li>AI 反复犯同类错 → 缺少机器可判定的验收标准；</li>
+<li>流程依赖你全程盯守 → 该 skillify 或上自主模式。</li>
+</ul>
+
+<h2>9.4 团队层面的进化</h2>
+
+<p>个人进化靠记忆，团队进化靠<strong>随代码入库的共享文件</strong>：项目 CLAUDE.md/AGENTS.md、wiki、技能都在仓库里，新人(和他们的 AI)第一天就继承全部经验。团队约定示例：</p>
+
+<ul>
+<li>踩坑必须写 wiki 调试复盘页；</li>
+<li>重复流程一律 skillify 固化；</li>
+<li>CLAUDE.md 修订走 PR 评审，像代码一样对待。</li>
+</ul>
+
+</body>
+</html>
