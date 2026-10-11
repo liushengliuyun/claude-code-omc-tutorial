@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="utf-8"/><title>第 6 章</title></head>
+<body>
+<h1>第 6 章 OMC 核心工作流：plan → execute → review → verify</h1>
+
+<p>这是 OMC 的"正字法"流程，也是日常 80% 的委派都应该走的路。四个阶段各由一个专职 Agent 负责，你只在关卡处确认。</p>
+
+<h2>6.1 全景图</h2>
+
+<pre><code>需求
+ │
+ ▼
+plan(规划)     planner/architect 出方案 → 你确认方向,不必逐行看
+ │
+ ▼
+execute(执行)  executor 按计划实现,每步带验证点
+ │
+ ▼
+review(审查)   code-reviewer 独立上下文审查,按严重度分级报告
+ │
+ ▼
+verify(验证)   verifier 收集证据:测试/构建/复现,确认"真的做完了"
+ │
+ ▼
+你验收 → 提交</code></pre>
+
+<p>记住一条主线:<strong>每个阶段的产出就是下一阶段的输入</strong>。计划文档喂给 executor,实现结果喂给 reviewer,review 后的最终态喂给 verifier。</p>
+
+<h2>6.2 plan:先对齐方向,再谈实现</h2>
+
+<p>调用 <code>/oh-my-claudecode:plan</code>(或对话里说"用 OMC plan 流程")。规划 Agent 会:</p>
+
+<ul>
+<li>探索代码库、读 CLAUDE.md/AGENTS.md、必要时问澄清问题(OMC 还有 deep-interview/ralplan 两个专门的深度澄清入口,适合需求非常模糊时);</li>
+<li>产出一份计划文档(通常落在 <code>.omc/plans/</code>);</li>
+<li>你重点审:目标对不对、边界清不清、有没有漏掉关键约束、验证方式是否可信。</li>
+</ul>
+
+<p><strong>关卡原则:确认方案,不确认细节。</strong>方向和边界你把关;类怎么拆、函数叫什么名字,放手让 AI 定。</p>
+
+<p><strong>红线:计划未确认前不许写代码。</strong>在指令里明确"先出计划,等我确认再动手"。</p>
+
+<h2>6.3 execute:带验证点的执行</h2>
+
+<p>调用 <code>/oh-my-claudecode:execute</code>。executor 拿着已确认的计划分步实现,要点:</p>
+
+<ul>
+<li>复杂实现显式说"executor 用 opus";</li>
+<li>要求每步给出验证证据,不要"看起来写完了"就进下一阶段;</li>
+<li>执行中发现计划有误,让它停下来报告,而不是擅自改方向。</li>
+</ul>
+
+<h2>6.4 review:独立上下文的作者-审查者分离</h2>
+
+<p>调用 <code>/oh-my-claudecode:review</code>(OMC 的审查技能)。code-reviewer 在一个<strong>全新的上下文</strong>里重新读改动:</p>
+
+<ul>
+<li>按严重度分级(critical/major/minor)给出结构化报告;</li>
+<li>审查范围三选一:工作区 diff、指定分支/PR、最近提交;</li>
+<li>报告直接给到文件:行号,便于 executor 修复;</li>
+<li>审查报告也喂给 executor 修复,修完再审,直到无 critical/major。</li>
+</ul>
+
+<h2>6.5 verify:用证据说话</h2>
+
+<p>调用 <code>/oh-my-claudecode:verify</code>。verifier 的工作是回答一个问题:<strong>"你怎么知道它真的能跑?"</strong></p>
+
+<ul>
+<li>小改动:跑一遍 luacheck/单元测试即可;</li>
+<li>标准:构建 + 测试 + 关键路径手工复现;</li>
+<li>安全相关:让 security-reviewer 单独过一遍。</li>
+</ul>
+
+<p>验收时要求 AI 汇报"验证证据"(命令与输出摘要),而不是"我觉得完成了"。这是防止"AI 自称完成"的第一道防线。</p>
+
+<h2>6.6 把流程变成肌肉记忆</h2>
+
+<p>日常使用不需要记命令——把这套流程写进 CLAUDE.md 的协作约定里,例如:</p>
+
+<pre><code>## 协作约定
+- 非琐碎改动先 plan 后 execute
+- review 必须走独立上下文的 code-reviewer,不允许自查自审
+- 完成前必须 verify,汇报验证证据
+- 提交信息格式: 类型: 描述</code></pre>
+
+<p>写进文件的记忆 > 对话里的口头要求。</p>
+
+</body>
+</html>
