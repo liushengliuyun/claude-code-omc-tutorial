@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="utf-8"/><title>第 7 章</title></head>
+<body>
+<h1>第 7 章 自主模式：autopilot / ralph / ultragoal / team</h1>
+
+<p>编排流程里你还要在关卡确认方案、验收结果。自主模式更进一步：<strong>你只给定目标，AI 自己规划、执行、验证、循环，直到完成或被你叫停。</strong>适合"你不用中途盯"的任务：大重构、批量迁移、长测试循环。</p>
+
+<h2>7.1 autopilot：全自动驾驶</h2>
+
+<p>说 "autopilot" 或调用 <code>/oh-my-claudecode:autopilot</code>，给一句话目标：</p>
+
+<pre><code>autopilot: 把 LuaScripts 里所有 TODO 注释清理干净，
+每处要么实现要么升级为明确 issue 提示，保持 luacheck 通过</code></pre>
+
+<p>它自动走 plan → execute → review → verify 全链路，无需关卡确认。适合<strong>边界清晰、验收可自动化</strong>的任务。若验收不可自动化，不要用 autopilot。</p>
+
+<h2>7.2 ralph：循环直到完成</h2>
+
+<p>ralph 技能实现"循环直到完成"：给一个任务，它反复迭代（规划→执行→验证→自我修正），可配置一个审查者 Agent 做完成判定。适合有明确终点的长循环，比如"迁移完这 50 个文件"。</p>
+
+<h2>7.3 ultragoal：持久多目标台账</h2>
+
+<p>ultragoal 把目标写成持久化的计划/台账文件（<code>.omc/ultragoal/</code>），跨会话追踪多个目标的进度，适合长周期项目。</p>
+
+<h2>7.4 team：多 Agent 协同</h2>
+
+<p><code>/oh-my-claudecode:team</code> 显式启动 N 个 Agent 协同处理共享任务列表。适合大任务需要并行分工（比如同时调研 3 个模块）。</p>
+
+<h2>7.5 怎么选模式</h2>
+
+<table>
+<tr><th>场景</th><th>推荐</th><th>原因</th></tr>
+<tr><td>边界清晰、验收可自动化</td><td>autopilot</td><td>全链路无人值守</td></tr>
+<tr><td>明确终点的长循环（迁移/批量）</td><td>ralph</td><td>循环直到完成判定通过</td></tr>
+<tr><td>长周期多目标</td><td>ultragoal</td><td>持久台账跨会话追踪</td></tr>
+<tr><td>大任务并行分工</td><td>team</td><td>共享任务列表</td></tr>
+<tr><td>需求模糊</td><td>plan / deep-interview / ralplan</td><td>先澄清再执行</td></tr>
+<tr><td>研究型问题</td><td>research</td><td>有出处的调研报告</td></tr>
+</table>
+
+<p>所有模式可随时 <code>/oh-my-claudecode:cancel</code> 取消并清理状态。</p>
+
+<h2>7.6 自主模式的护栏</h2>
+
+<ul>
+<li><strong>只在验收可自动化时用</strong>：自主模式最大的风险是"在错误的路上跑很远"，护栏是机器可判定的验收标准；</li>
+<li><strong>给足上下文再放行</strong>：启动前写清约束（"不要动 DataAccess 生成代码"、"不要 push"），自主模式下你说不上一句话；</li>
+<li><strong>用 git 兜底</strong>：放行前工作区干净、分支正确，出问题可整体回滚；</li>
+<li><strong>设上限</strong>：例如"最多迭代 10 轮，超了停下汇报"。</li>
+</ul>
+
+</body>
+</html>
