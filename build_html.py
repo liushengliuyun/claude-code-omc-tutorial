@@ -75,7 +75,7 @@ PAGE = """<!DOCTYPE html>
 <main>
 <header class="book">
 <h1>{title}</h1>
-<p class="meta">代逸凡 · 编 · 2026 年 10 月 ·
+<p class="meta">柳生流云 · 编 · 2026 年 10 月 ·
 <a href="https://github.com/liushengliuyun/claude-code-omc-tutorial">GitHub 仓库</a></p>
 </header>
 {body}
