@@ -30,7 +30,8 @@
 
 ## 阅读
 
-下载 `ClaudeCodeTutorial.epub` 后用任意 EPUB 阅读器打开即可（手机/电脑阅读器均可）。
+- **在线阅读（推荐）**：https://liushengliuyun.github.io/claude-code-omc-tutorial/ （GitHub Pages，左侧目录导航）
+- **EPUB 下载**：`ClaudeCodeTutorial.epub` — 用任意 EPUB 阅读器打开（内置目录索引 + NCX 兼容旧阅读器）
 
 ---
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
