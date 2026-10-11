@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="utf-8"/><title>第 8 章</title></head>
+<body>
+<h1>第 8 章 知识沉淀：wiki / remember / deepinit / skillify</h1>
+
+<p>第 4 章讲了"记忆"——记住事实和纠偏。本章讲更进一步的事：<strong>把经验变成可复用资产</strong>，这是"AI 进化"的核心机制。</p>
+
+<h2>8.1 从经验到资产：三级火箭</h2>
+
+<pre><code>一次好经验
+  →(wiki)     知识页,可检索,跨会话复用
+  →(skillify) 技能草稿,固化成可调用技能
+  →(skill)    正式技能,斜杠命令触发,团队共享</code></pre>
+
+<h2>8.2 wiki：团队知识库</h2>
+
+<p>"LLM Wiki"的核心论点：让 AI 自己维护一个 markdown 知识库，把每个值得记住的东西写成页面，带分类、标签、交叉引用，让知识产生复利。OMC 的 wiki skill 实现了这一点：</p>
+
+<ul>
+<li><code>/oh-my-claudecode:wiki</code> 写入/更新页面（合并策略是追加，从不静默覆盖）；</li>
+<li>工作过程中 AI 可以自动沉淀（调试复盘写成 debugging 类页面）；</li>
+<li>检索时 AI 按关键词/标签查询，把结论带回对话。</li>
+</ul>
+
+<h2>8.3 remember：决定什么值得记、记在哪层</h2>
+
+<p><code>/oh-my-claudecode:remember</code> 不是"什么都存"的仓库，而是一次<strong>知识分类决策</strong>：会话里出现一条值得保留的知识，先判断它属于哪一层。</p>
+
+<table>
+<tr><th>层</th><th>放什么</th></tr>
+<tr><td>CLAUDE.md / AGENTS.md</td><td>每次对话都要生效的规则</td></tr>
+<tr><td>project memory / notepad</td><td>项目运行时状态、常备指令</td></tr>
+<tr><td>wiki</td><td>低频但重要的知识、复盘文章</td></tr>
+<tr><td>skill</td><td>重复流程的自动化封装</td></tr>
+</table>
+
+<p>分类错层会浪费：规则进 wiki 会被忽略，知识进 CLAUDE.md 会稀释上下文。<strong>选层就是设计。</strong></p>
+
+<h2>8.4 skillify：把会话里的好流程固化成技能</h2>
+
+<p>skillify 把会话中摸索出的好流程起草成技能草稿（触发词、步骤、验证方式），你审阅后正式启用。此后一个斜杠命令即可重放整个流程。</p>
+
+<p><strong>这正是"AI 进化"最直接的形式：AI 把自己摸索出的流程沉淀成自己的技能。</strong></p>
+
+<h2>8.5 deepinit：给新项目做"入职体检"</h2>
+
+<p>OMC 的 deepinit 生成带增量维护的分层 AGENTS.md 文档树。新接手项目或冷启动时跑一次，后续结构变化时增量更新，子智能体的探索成本显著下降。</p>
+
+<h2>8.6 沉淀的时机判断</h2>
+
+<p>不是所有东西都值得沉淀。三个判断标准：</p>
+
+<ul>
+<li><strong>第二遍</strong>：同一件事你解释了第二遍 → 值得记；</li>
+<li><strong>30 分钟</strong>：排障超过 30 分钟 → 值得写一页 wiki 复盘；</li>
+<li><strong>第三遍</strong>：同一流程手工走了第三遍 → skillify 技能化。</li>
+</ul>
+
+<p>口诀：<strong>"第二遍记忆、30 分钟复盘、第三遍技能化"。</strong>用这套标准，知识库不会变成垃圾场。</p>
+
+</body>
+</html>
