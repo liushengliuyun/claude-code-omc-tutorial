@@ -33,7 +33,7 @@
 - **在线阅读（推荐）**：https://liushengliuyun.github.io/claude-code-omc-tutorial/ （GitHub Pages，左侧目录导航）
 - **番外篇**：[CC Switch 指南 — 给 Claude Code 换发动机](https://liushengliuyun.github.io/claude-code-omc-tutorial/cc-switch.html)（作用/使用说明/买 Key/配 Key，DeepSeek 按量付费）
 - **EPUB 下载**：`ClaudeCodeTutorial.epub` — 用任意 EPUB 阅读器打开（内置目录索引 + NCX 兼容旧阅读器）
-- **[Releases](https://github.com/liushengliuyun/claude-code-omc-tutorial/releases)**：舟氏AI启航包（Claude Code 新手环境一键安装包）
+- **[Releases](https://github.com/liushengliuyun/claude-code-omc-tutorial/releases)**：v1.0（舟氏AI启航包暂未挂载，受本机网络上传限制，如需获取请联系作者）
 
 ## 番外：CC Switch + 国内按量付费模型（DeepSeek 示例）
 
