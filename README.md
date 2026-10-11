@@ -31,7 +31,22 @@
 ## 阅读
 
 - **在线阅读（推荐）**：https://liushengliuyun.github.io/claude-code-omc-tutorial/ （GitHub Pages，左侧目录导航）
+- **番外篇**：[CC Switch 指南 — 给 Claude Code 换发动机](https://liushengliuyun.github.io/claude-code-omc-tutorial/cc-switch.html)（作用/使用说明/买 Key/配 Key，DeepSeek 按量付费）
 - **EPUB 下载**：`ClaudeCodeTutorial.epub` — 用任意 EPUB 阅读器打开（内置目录索引 + NCX 兼容旧阅读器）
+- **[Releases](https://github.com/liushengliuyun/claude-code-omc-tutorial/releases)**：舟氏AI启航包（Claude Code 新手环境一键安装包）
+
+## 番外：CC Switch + 国内按量付费模型（DeepSeek 示例）
+
+**CC Switch**（[farion1231/cc-switch](https://github.com/farion1231/cc-switch)，官网 ccswitch.io）是开源桌面工具，给 Claude Code / Codex 等命令行 AI 工具做**供应商管理**：多供应商配置卡片一键切换（原理是改写 `~/.claude/settings.json` 里的 `ANTHROPIC_BASE_URL`/`ANTHROPIC_AUTH_TOKEN`/`ANTHROPIC_MODEL`），带格式路由（Anthropic/OpenAI 互转）、用量日志、MCP/提示词/Skills 管理和自动备份。
+
+**买 Key（国内可买、按量付费、非包月）首选 DeepSeek**：
+
+1. [platform.deepseek.com](https://platform.deepseek.com) 注册 → 充值（微信/支付宝）→「API Keys」创建 `sk-...`（只显示一次）；
+2. 按量计费无包月：`deepseek-flash` 输入错峰 $0.15/百万 tokens（高峰 $0.3），输出错峰 $0.6（高峰 $1.2）；`deepseek-v4-pro` 约为 flash 的 4.4 倍；缓存命中输入低至 $0.003；
+3. CC Switch 里添加 Claude 类型供应商：Base URL `https://api.deepseek.com/anthropic` + Key + 模型 `deepseek-flash`（服务端自动把 claude-opus 映射 v4-pro、sonnet/haiku 映射 flash，想控成本就显式指定）；
+4. 免安装方案直接设环境变量：`ANTHROPIC_BASE_URL` / `ANTHROPIC_AUTH_TOKEN` / `ANTHROPIC_MODEL` / `CLAUDE_CODE_SUBAGENT_MODEL`。
+
+详细图文与注意事项见[在线番外篇](https://liushengliuyun.github.io/claude-code-omc-tutorial/cc-switch.html)。
 
 ---
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
