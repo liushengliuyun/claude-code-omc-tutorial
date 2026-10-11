@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="utf-8"/><title>附录</title></head>
+<body>
+<h1>附录 常用命令速查表</h1>
+
+<h2>A.1 Claude Code 内置</h2>
+
+<pre><code>/clear                    清空上下文,开新任务
+/compact                  压缩历史,省 token
+/model                    切换模型档位
+/resume                   恢复会话
+Shift+Tab                 计划模式/权限模式切换
+Esc / 双击 Esc             打断 / 回退到历史消息重新指挥
+@文件名                    精确引用文件
+claude -p "..."           非交互模式(脚本调用)</code></pre>
+
+<h2>A.2 OMC 技能速查(oh-my-claudecode:)</h2>
+
+<table>
+<tr><th>技能</th><th>一句话用途</th></tr>
+<tr><td>plan</td><td>规划:调研并产出可执行计划</td></tr>
+<tr><td>execute</td><td>执行:按计划实现并验证</td></tr>
+<tr><td>review</td><td>审查:独立上下文 code-reviewer</td></tr>
+<tr><td>verify</td><td>验证:证据确认"真的做完了"</td></tr>
+<tr><td>autopilot</td><td>全自动驾驶:目标进,结果出</td></tr>
+<tr><td>ralph</td><td>循环直到完成(可配置审查者)</td></tr>
+<tr><td>ultragoal</td><td>持久多目标台账(.omc/ultragoal)</td></tr>
+<tr><td>team</td><td>N 个 Agent 协同共享任务列表</td></tr>
+<tr><td>research</td><td>有出处的调研报告</td></tr>
+<tr><td>trace / debug</td><td>证据驱动的调试与调用链追踪</td></tr>
+<tr><td>deep-interview/ralplan</td><td>需求澄清后规划</td></tr>
+<tr><td>deepinit</td><td>分层 AGENTS.md 文档树生成</td></tr>
+<tr><td>remember</td><td>知识分类决策(记忆/wiki/技能)</td></tr>
+<tr><td>skillify</td><td>把会话流程固化成技能</td></tr>
+<tr><td>wiki</td><td>持久 markdown 知识库</td></tr>
+<tr><td>tdd</td><td>测试先行,在预定接缝处</td></tr>
+<tr><td>ai-slop-cleaner</td><td>清理 AI 生成的冗余代码</td></tr>
+<tr><td>cancel</td><td>取消任何 OMC 模式</td></tr>
+<tr><td>omc-setup / omc-doctor</td><td>安装刷新 / 安装诊断</td></tr>
+</table>
+
+<h2>A.3 OMC 状态根(.omc/)地图</h2>
+
+<pre><code>.omc/
+├── state/         编排模式进行时状态(可恢复)
+├── plans/         计划文档
+├── research/      调研产物
+├── logs/          日志
+├── artifacts/     产物(本 EPUB 源文件也在这里)
+├── handoffs/      会话交接
+├── notepad.md     分区工作笔记
+├── project-memory.json  结构化项目记忆
+└── wiki/          持久知识库</code></pre>
+
+</body>
+</html>
