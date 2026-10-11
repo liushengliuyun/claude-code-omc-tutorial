@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CC Switch 指南 — 指挥AI的艺术</title>
+<style>
+body { margin: 0; font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+       line-height: 1.75; color: #24292f; background: #fff; }
+.layout { display: flex; max-width: 1280px; margin: 0 auto; }
+nav.toc { width: 300px; flex: none; position: sticky; top: 0;
+          max-height: 100vh; overflow-y: auto; padding: 24px 16px;
+          border-right: 1px solid #d0d7de; background: #f6f8fa; }
+nav.toc h2 { font-size: 1em; margin: 0 0 12px; color: #57606a; }
+nav.toc a { display: block; padding: 5px 10px; border-radius: 6px;
+            color: #24292f; text-decoration: none; font-size: 0.9em; }
+nav.toc a:hover { background: #eaeef2; }
+nav.toc a.active { background: #dbeafe; font-weight: 600; }
+main { flex: 1; min-width: 0; padding: 24px 40px 80px; max-width: 860px; }
+h1 { font-size: 1.55em; border-bottom: 2px solid #d0d7de; padding-bottom: 8px; }
+h2 { font-size: 1.25em; border-bottom: 1px solid #eaeef2; padding-bottom: 6px; }
+h3 { font-size: 1.1em; }
+pre { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px;
+      padding: 12px; overflow-x: auto; font-size: 0.88em; line-height: 1.5; }
+code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 0.9em;
+       background: #f6f8fa; padding: 1px 5px; border-radius: 4px; }
+pre code { background: none; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 0.92em; }
+th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; }
+th { background: #f6f8fa; }
+.tip { background: #fff8c5; border: 1px solid #d4a72c66; border-radius: 6px;
+       padding: 8px 12px; }
+.warn { background: #ffebe9; border: 1px solid #ff818266; border-radius: 6px;
+        padding: 8px 12px; }
+.back { font-size: 0.9em; }
+@media (max-width: 900px) {
+  nav.toc { position: static; width: auto; border-right: none;
+            border-bottom: 1px solid #d0d7de; max-height: none; }
+  .layout { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+<h2>本页目录</h2>
+<a href="#what">CC Switch 是什么</a>
+<a href="#why">为什么需要它</a>
+<a href="#install">下载与安装</a>
+<a href="#buy">买 Key：国内按量付费首选 DeepSeek</a>
+<a href="#config">配置：把 DeepSeek 接进 CC Switch</a>
+<a href="#others">其他国内可选供应商</a>
+<a href="#faq">常见问题与注意事项</a>
+<p style="margin-top:16px;font-size:0.85em;border-top:1px solid #d0d7de;padding-top:8px;">
+<a class="back" href="index.html">← 返回《指挥AI的艺术》</a></p>
+</nav>
+<main>
+<h1>番外：CC Switch 指南 — 给 Claude Code 换发动机</h1>
+
+<p>本篇回答三个问题：<strong>CC Switch 是干嘛的</strong>、<strong>去哪买 Key</strong>（重点介绍国内能买到的按量付费方案，以 DeepSeek 为例）、<strong>怎么配进去就能用</strong>。</p>
+
+<h2 id="what">CC Switch 是什么</h2>
+
+<p><a href="https://github.com/farion1231/cc-switch">CC Switch</a>（官网 ccswitch.io）是一个开源的跨平台桌面工具，可以理解为<strong>命令行 AI 编程工具的"供应商管理器"</strong>。它统一管理 Claude Code、Codex、OpenCode、Grok Build 等工具的接入配置：</p>
+
+<ul>
+<li><strong>多供应商配置卡片</strong>：把官方 Anthropic、各种中转站、DeepSeek 等第三方都配置成一张张"卡片"，界面里一键切换当前生效的供应商；</li>
+<li><strong>切换原理</strong>：切换时自动改写对应工具的配置文件（如 <code>~/.claude/settings.json</code> 里的 <code>ANTHROPIC_BASE_URL</code> / <code>ANTHROPIC_AUTH_TOKEN</code> / <code>ANTHROPIC_MODEL</code> 等环境变量段）；</li>
+<li><strong>格式转换/路由</strong>：支持 Anthropic Messages 和 OpenAI 两种上游格式互转（路由模式），让"只说 OpenAI 方言"的模型也能被 Claude Code 调用；</li>
+<li><strong>周边管理</strong>：连通性检查、用量统计与请求日志、MCP / 提示词 / Skills 统一管理、自动备份（数据在 <code>~/.cc-switch</code>，默认每 24 小时备份，保留最近 10 份）。</li>
+</ul>
+
+<h2 id="why">为什么需要它</h2>
+
+<p>Claude Code 客户端默认只对接 Anthropic 官方账号，而国内注册、付款都不方便。好消息是 <strong>Claude Code 只认协议，不认公司</strong>：只要一个服务实现了 Anthropic Messages 协议（改 <code>base_url</code> + <code>key</code> + 模型名），它就能当 Claude Code 的"发动机"。CC Switch 把"换发动机"这件事从"手改配置文件"变成"点一下"。</p>
+
+<h2 id="install">下载与安装</h2>
+
+<ul>
+<li>官网/GitHub Releases 下载：Windows 有 <code>CC-Switch-v{版本}-Windows.msi</code>（安装版）和 <code>Portable.zip</code>（免安装版），ARM 设备有专门的 arm64 包；</li>
+<li>macOS / Linux 同样有对应安装包和 Flatpak；</li>
+<li>本机已就位：<code>E:\cc-switch\cc-switch.exe</code>（便携版），双击即用。</li>
+</ul>
+
+<h2 id="buy">买 Key：国内按量付费首选 DeepSeek</h2>
+
+<p>选择标准：<strong>国内能注册能付款、按量计费（充值制，非包月）、协议兼容</strong>。按这三条筛，DeepSeek 是当前最省心的首选。</p>
+
+<h3>购买步骤（约 5 分钟）</h3>
+
+<ol>
+<li>打开 <a href="https://platform.deepseek.com">platform.deepseek.com</a>，手机号注册登录；</li>
+<li>左侧「充值」页面充值（支持微信/支付宝），首次建议充 ¥50 试水；</li>
+<li>「API Keys」页面创建密钥，得到 <code>sk-...</code> 开头的 Key（<strong>只显示一次，立即复制保存</strong>）；</li>
+<li>计费方式：<strong>按 tokens 用量扣余额，用多少扣多少，没有包月、没有最低消费</strong>，不用时零花费。</li>
+</ol>
+
+<h3>价格参考（每 100 万 tokens，美元计价）</h3>
+
+<table>
+<tr><th>模型</th><th>输入（缓存命中）</th><th>输入（缓存未命中）</th><th>输出</th></tr>
+<tr><td><code>deepseek-flash</code></td><td>$0.003–0.006</td><td>错峰 $0.15 / 高峰 $0.3</td><td>错峰 $0.6 / 高峰 $1.2</td></tr>
+<tr><td><code>deepseek-v4-pro</code></td><td>$0.022–0.044</td><td>错峰 $0.66 / 高峰 $1.32</td><td>错峰 $1.98 / 高峰 $3.96</td></tr>
+</table>
+
+<p>说明：错峰时段自动半价；缓存命中部分的输入价格低两个数量级。日常开发一天的成本通常在几毛到几块钱人民币量级。</p>
+
+<h2 id="config">配置：把 DeepSeek 接进 CC Switch</h2>
+
+<p>在 CC Switch 里「添加供应商」→ 类型选 <strong>Claude / Anthropic</strong>，填：</p>
+
+<table>
+<tr><th>字段</th><th>填什么</th><th>说明</th></tr>
+<tr><td>Base URL</td><td><code>https://api.deepseek.com/anthropic</code></td><td>DeepSeek 的 Anthropic 兼容端点</td></tr>
+<tr><td>API Key</td><td><code>sk-...</code></td><td>platform.deepseek.com 生成</td></tr>
+<tr><td>主模型</td><td><code>deepseek-flash</code></td><td>日常开发够用，价格友好</td></tr>
+<tr><td>子代理模型</td><td><code>deepseek-flash</code></td><td>子智能体用量大，用 flash 控成本</td></tr>
+<tr><td>Opus 档模型</td><td><code>deepseek-v4-pro</code></td><td>复杂任务时手动切换用</td></tr>
+</table>
+
+<p>不填模型名也行：DeepSeek 服务端会自动映射——<code>claude-opus*</code> 请求映射到 <code>deepseek-v4-pro</code>（按 v4-pro 计费），<code>claude-sonnet/haiku*</code> 映射到 <code>deepseek-flash</code>。想控成本就显式把主/子模型都填成 <code>deepseek-flash</code>。</p>
+
+<p>不想装 CC Switch 也可以直接用环境变量（PowerShell）：</p>
+
+<pre><code>$env:ANTHROPIC_BASE_URL="https://api.deepseek.com/anthropic"
+$env:ANTHROPIC_AUTH_TOKEN="sk-你的Key"
+$env:ANTHROPIC_MODEL="deepseek-flash"
+$env:CLAUDE_CODE_SUBAGENT_MODEL="deepseek-flash"</code></pre>
+
+<p>设置后当前终端里运行 <code>claude</code> 即走 DeepSeek。想永久生效就写进系统环境变量。</p>
+
+<h2 id="others">其他国内可选供应商</h2>
+
+<table>
+<tr><th>供应商</th><th>计费方式</th><th>说明</th></tr>
+<tr><td>DeepSeek（首选）</td><td>充值制按量付费</td><td>Anthropic 兼容端点现成，配置最省事</td></tr>
+<tr><td>Kimi / Moonshot</td><td>充值制按量付费</td><td>提供 OpenAI 兼容接口，走 CC Switch 路由模式接入</td></tr>
+<tr><td>智谱 GLM</td><td>按量 + 包月 Coding Plan</td><td>对 Claude Code 有专门适配；包月适合重度用户</td></tr>
+<tr><td>阿里百炼（Qwen）</td><td>充值制按量付费</td><td>OpenAI 兼容接口，经路由接入</td></tr>
+<tr><td>第三方中转站</td><td>充值制</td><td>一个 Key 用多个模型，注意甄别信誉，<strong>Key 安全自担</strong></td></tr>
+</table>
+
+<p>接法都一样：<strong>Base URL + Key + 模型名</strong>三件套。只有 Anthropic 格式的能直连（Claude 类型供应商卡），OpenAI 格式的需要在 CC Switch 里用路由模式转换。</p>
+
+<h2 id="faq">常见问题与注意事项</h2>
+
+<ul>
+<li><strong>连通性检查通过 ≠ 能用</strong>：检查只测地址可达，不验证 Key 和模型名。配完跑一次真实对话才算数；</li>
+<li><strong>报 404/405</strong>：多半是上游格式选错——Claude 系工具选 Anthropic Messages 格式；</li>
+<li><strong>Key 安全</strong>：Key 等同钱包，别发群里、别提交进仓库；CC Switch 的数据（含 Key）明文存本机 <code>~/.cc-switch</code>，电脑共用环境注意；</li>
+<li><strong>成本控制</strong>：平台页面看实时用量；子代理模型用便宜档位；错峰跑长任务；子代理模型别设成贵的；</li>
+<li><strong>遇到限流</strong>：个人 Key 并发有限制，跑 OMC 多智能体（team 模式多 Agent 并行）时注意并发上限，必要时错峰或分批。</li>
+</ul>
+</main>
+</div>
+</body>
+</html>
