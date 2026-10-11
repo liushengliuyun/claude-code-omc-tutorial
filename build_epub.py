@@ -53,7 +53,7 @@ def build():
         '    <dc:identifier id="pub-id">%s</dc:identifier>' % uid,
         '    <dc:title>%s</dc:title>' % TITLE,
         '    <dc:language>zh-CN</dc:language>',
-        '    <dc:creator>代逸凡</dc:creator>',
+        '    <dc:creator>柳生流云</dc:creator>',
         '    <meta property="dcterms:modified">%s</meta>' % MODIFIED,
         '  </metadata>',
         '  <manifest>',
