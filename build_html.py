@@ -99,6 +99,7 @@ def main():
         path = os.path.join(SRC, slug + ".xhtml")
         toc.append('<a href="#sec-%s">%s</a>' % (slug, label))
         parts.append('<section id="sec-%s">%s</section>' % (slug, body_of(path)))
+    toc.append('<a href="cc-switch.html" style="margin-top:8px;border-top:1px solid #d0d7de;padding-top:8px;">番外 · CC Switch 指南 →</a>')
     title = "指挥AI的艺术：用 Claude Code + OMC 打造持续学习与进化的智能工作流"
     html = PAGE.format(title=title, css=CSS,
                        toc="\n".join(toc), body="\n".join(parts))
