@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="utf-8"/><title>第 2 章</title></head>
+<body>
+<h1>第 2 章 Claude Code 快速上手</h1>
+
+<p>本章把后面会用到的 Claude Code 基础能力过一遍。已经熟练的读者可以直接跳到第 3 章。</p>
+
+<h2>2.1 安装与启动</h2>
+
+<pre><code>npm install -g @anthropic-ai/claude-code   # 安装
+claude                                     # 在项目根目录启动
+claude -p "总结这个仓库的结构"               # 非交互模式(适合脚本调用)
+claude --resume                            # 恢复上一次会话</code></pre>
+
+<h2>2.2 会话即工作区</h2>
+
+<p>Claude Code 的基本单位是<strong>会话</strong>。你在一个终端里和它对话，它可以读写文件、执行命令、搜索代码。启动后它会自动读取以下上下文（按优先级）：</p>
+
+<table>
+<tr><th>文件</th><th>作用</th></tr>
+<tr><td><code>~/.claude/CLAUDE.md</code></td><td>全局个人指令，所有项目生效</td></tr>
+<tr><td><code>项目根/CLAUDE.md</code></td><td>项目指令，随代码入库，团队共享</td></tr>
+<tr><td><code>项目根/AGENTS.md</code></td><td>给子智能体/其他工具读的项目说明</td></tr>
+<tr><td><code>.claude/settings.json</code></td><td>权限、hooks 等行为配置</td></tr>
+</table>
+
+<p>所以"每次都要重复说的话"，正确做法不是每次打一遍，而是写进上面这些文件。这是第 4 章记忆体系的入口。</p>
+
+<h2>2.3 交互基本功</h2>
+
+<ul>
+<li><strong>斜杠命令</strong>：输入框里 <code>/</code> 开头，如 <code>/clear</code>（清空上下文开新任务）、<code>/compact</code>（压缩历史省 token）、<code>/model</code>（切换模型档位）、<code>/resume</code>、<code>/config</code>；</li>
+<li><strong>计划模式</strong>：Shift+Tab 切换到 Plan Mode，AI 只探索和出方案不动代码，适合任何非琐碎改动；</li>
+<li><strong>打断与纠偏</strong>：随时 Esc 打断，说"不对，方向错了"比让它跑完再返工便宜得多；</li>
+<li><strong>Esc 退 Esc 进</strong>：连按两次 Esc 回退到历史某条消息，从那里重新指挥，而不是道歉后继续；</li>
+<li><strong>@文件引用</strong>：输入 <code>@</code> 可以精确引用文件，把上下文指给它，而不是复制粘贴内容。</li>
+</ul>
+
+<h2>2.4 权限模型</h2>
+
+<p>Claude Code 的每个敏感操作（写文件、执行命令）都会请求许可，权限模式有：</p>
+
+<ul>
+<li><strong>默认模式</strong>：每步询问，最安全也最累；</li>
+<li><strong>自动接受编辑（acceptEdits）</strong>：文件编辑自动通过，命令仍询问——日常开发推荐；</li>
+<li><strong>计划模式</strong>：只读不动手，出方案；</li>
+<li><strong>bypassPermissions</strong>：全放行，只在你完全信任的任务里用（比如让它自己跑测试循环）。</li>
+</ul>
+
+<p>可以配置白名单减少询问频率（<code>.claude/settings.json</code> 的 permissions 段，或用 <code>/fewer-permission-prompts</code> 技能自动扫描并生成白名单）。原则：<strong>读操作大胆放行，写操作和破坏性命令保持确认</strong>。</p>
+
+<h2>2.5 Hooks：在关键节点安插你的规则</h2>
+
+<p>Hooks 是 Claude Code 的钩子机制：在工具调用前后、会话开始等时机自动执行你定义的动作，比如：提交前强制跑 lint、把输出重定向到摘要工具、注入提醒。配置在 <code>settings.json</code> 里。当你发现"我每次都要口头提醒 AI 某件事"时，就该考虑把它做成 hook——<strong>口头提醒会忘，钩子不会</strong>。</p>
+
+<h2>2.6 子智能体</h2>
+
+<p>复杂任务可以派生子智能体（subagent）：让一个独立上下文的 Claude 去搜代码、做研究、写方案，只把结论带回主会话。这样可以避免主会话被海量中间输出撑爆。OMC 本质上就是把这套机制产品化成一个完整的 agent 目录（第 5 章）。</p>
+
+</body>
+</html>
