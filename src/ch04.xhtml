@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="utf-8"/><title>第 4 章</title></head>
+<body>
+<h1>第 4 章 记忆体系：让 AI 记住你和你的项目</h1>
+
+<p>回忆第 1 章的心智模型："每天失忆的聪明同事"。治愈失忆的办法不是反复口头解释，而是<strong>建立一套分层的、AI 会自动读取的记忆体系</strong>。本章按"离 AI 由远到近"介绍各层。</p>
+
+<h2>4.1 五层记忆，各司其职</h2>
+
+<table>
+<tr><th>层</th><th>载体</th><th>放什么</th><th>谁维护</th></tr>
+<tr><td>全局个人层</td><td><code>~/.claude/CLAUDE.md</code></td><td>你的通用偏好、工作习惯</td><td>你</td></tr>
+<tr><td>项目共享层</td><td><code>项目/CLAUDE.md</code>、<code>AGENTS.md</code></td><td>项目架构、规范、领域知识、踩坑规则</td><td>团队(随代码入库)</td></tr>
+<tr><td>自动记忆层</td><td>auto-memory(<code>~/.claude/projects/&lt;proj&gt;/memory/</code>)</td><td>会话中发现的关键事实、纠偏、项目状态</td><td>AI 在对话中自动读写</td></tr>
+<tr><td>项目运维层</td><td>OMC: notepad / project-memory / state</td><td>优先上下文、工作笔记、编排状态</td><td>AI + 你</td></tr>
+<tr><td>知识库层</td><td>OMC: wiki(.omc/wiki/*.md)</td><td>架构决策、调试案例、约定、经验文章</td><td>AI + 你</td></tr>
+</table>
+
+<h2>4.2 CLAUDE.md 怎么写才有效</h2>
+
+<p>CLAUDE.md 是杠杆率最高的一层记忆。写得好，AI 的输出质量上一个台阶；写得差(或者堆满 AI 生成的水话)，反而稀释重点。几条原则：</p>
+
+<ul>
+<li><strong>写"AI 猜不到的东西"</strong>：构建命令、目录结构、特殊约定、易错点。"请写出高质量代码"这类话毫无价值；</li>
+<li><strong>写"规则"而不是"描述"</strong>："控制器由框架缓存，不要在 Awake() 里手动缓存" 比 "控制器会被缓存" 有效得多；</li>
+<li><strong>写"为什么"</strong>：踩坑规则要带上后果，比如"漏传 <code>_L()</code> 的格式参数会导致运行时报错"；</li>
+<li><strong>控制长度</strong>：它每次对话都会被读入，只放高频使用的核心内容；低频知识放 wiki，按需查。</li>
+</ul>
+
+<h2>4.3 auto-memory：会话中的自动沉淀</h2>
+
+<p>Claude Code 有一个每项目独立的自动记忆目录。当你在对话中说"记住：配置表只能改 Excel 再导出，不许直接动 Luban 产物"，AI 会把它写成一条结构化记忆，并在未来相关对话中自动调出。适合存：</p>
+
+<ul>
+<li>你的纠偏("以后这类问题先给我方案再动手")；</li>
+<li>跨会话的项目状态("X 功能分支进行中，下一步是 Y")；</li>
+<li>环境怪癖("这台机器 git 外网被拦，装东西走内网镜像")。</li>
+</ul>
+
+<p>经验法则：<strong>口头说一遍就丢的信息不值得记；让你说过第二遍的信息值得写进记忆。</strong></p>
+
+<h2>4.4 OMC 的项目运维层</h2>
+
+<p>OMC 在项目里维护一个 <code>.omc/</code> 状态根，其中和记忆相关的有：</p>
+
+<ul>
+<li><strong>notepad</strong>：分区的工作笔记。优先上下文区(Priority)每次会话必读，适合放"当前最重要的事"；Working 区放临时状态(7 天自动过期)；Manual 区永不清理；</li>
+<li><strong>project memory</strong>：结构化的项目记忆(技术栈/构建/约定/架构笔记/常备指令)，适合放"常备指令"(比如"所有改动必须过 code-reviewer")；</li>
+<li><strong>state</strong>：各编排模式(autopilot/ralph/team...)的进行时状态，中断后可恢复。</li>
+</ul>
+
+<h2>4.5 知识库层：wiki</h2>
+
+<p>低频但重要的知识——架构决策、一次艰难的调试复盘、团队约定——放 CLAUDE.md 太占上下文，丢了又可惜。OMC 的 wiki skill 在 <code>.omc/wiki/</code> 维护一组带分类、标签、交叉引用的 markdown 页面，AI 可以写入也可以检索。它的设计目标是<strong>跨会话复利</strong>：每次踩坑复盘写一页，一年后这个知识库就是团队的隐形资产。</p>
+
+<h2>4.6 AGENTS.md 与 deepinit</h2>
+
+<p><code>AGENTS.md</code> 是给子智能体和第三方工具读的项目说明书。OMC 的 deepinit skill 可以扫描整个代码库，分层生成层级化的 AGENTS.md 文档树(根目录总览 + 各子目录的局部说明)，一次初始化，后续增量维护。新项目接手时先跑一次 deepinit，能显著降低 AI 的探索成本。</p>
+
+<h2>4.7 记忆的维护：会腐烂，要修剪</h2>
+
+<ul>
+<li>发现某条记忆过时/错误，让 AI 当场更正或删除；</li>
+<li>CLAUDE.md 超过几百行就该"降级"：高频留原地，低频移去 wiki；</li>
+<li>记忆冲突时，新信息覆盖旧信息，并记下"为什么改"。</li>
+</ul>
+
+</body>
+</html>
