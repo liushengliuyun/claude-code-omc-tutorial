@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>指挥AI的艺术：用 Claude Code + OMC 打造持续学习与进化的智能工作流</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+       line-height: 1.75; color: #24292f; background: #fff; }
+.layout { display: flex; max-width: 1280px; margin: 0 auto; }
+nav.toc { width: 300px; flex: none; position: sticky; top: 0;
+          max-height: 100vh; overflow-y: auto; padding: 24px 16px;
+          border-right: 1px solid #d0d7de; background: #f6f8fa; }
+nav.toc h2 { font-size: 1em; margin: 0 0 12px; color: #57606a; }
+nav.toc a { display: block; padding: 5px 10px; border-radius: 6px;
+            color: #24292f; text-decoration: none; font-size: 0.9em; }
+nav.toc a:hover { background: #eaeef2; }
+main { flex: 1; min-width: 0; padding: 24px 40px 80px; max-width: 860px; }
+h1 { font-size: 1.55em; border-bottom: 2px solid #d0d7de; padding-bottom: 8px; }
+h2 { font-size: 1.25em; border-bottom: 1px solid #eaeef2; padding-bottom: 6px; }
+pre { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px;
+      padding: 12px; overflow-x: auto; font-size: 0.88em; line-height: 1.5; }
+code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 0.9em;
+       background: #f6f8fa; padding: 1px 5px; border-radius: 4px; }
+pre code { background: none; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 0.92em; }
+th, td { border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; }
+th { background: #f6f8fa; }
+blockquote { color: #57606a; border-left: 4px solid #d0d7de;
+             margin-left: 0; padding-left: 12px; }
+header.book { border-bottom: 3px double #d0d7de; margin-bottom: 24px; padding-bottom: 16px; }
+header.book h1 { border: none; margin: 0; }
+header.book .meta { color: #57606a; }
+@media (max-width: 900px) {
+  nav.toc { position: static; width: auto; border-right: none;
+            border-bottom: 1px solid #d0d7de; max-height: none; }
+  .layout { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+<h2>目录</h2>
+<a href="#sec-cover">封面</a>
+<a href="#sec-preface">前言：从“敲代码的助手”到“可指挥的团队”</a>
+<a href="#sec-ch01">第 1 章 心智模型：AI 是一个失忆的聪明同事</a>
+<a href="#sec-ch02">第 2 章 Claude Code 快速上手</a>
+<a href="#sec-ch03">第 3 章 指挥的艺术：需求、上下文与成功标准</a>
+<a href="#sec-ch04">第 4 章 记忆体系：让 AI 记住你和你的项目</a>
+<a href="#sec-ch05">第 5 章 OMC 入门：多智能体定义与路由</a>
+<a href="#sec-ch06">第 6 章 OMC 核心工作流：plan → execute → review → verify</a>
+<a href="#sec-ch07">第 7 章 自主模式：autopilot / ralph / ultragoal / team</a>
+<a href="#sec-ch08">第 8 章 知识沉淀：wiki / remember / deepinit / skillify</a>
+<a href="#sec-ch09">第 9 章 持续进化的闭环</a>
+<a href="#sec-ch10">第 10 章 实战：从需求到交付的完整演练</a>
+<a href="#sec-appendix">附录 常用命令速查表</a>
+</nav>
+<main>
+<header class="book">
+<h1>指挥AI的艺术：用 Claude Code + OMC 打造持续学习与进化的智能工作流</h1>
+<p class="meta">代逸凡 · 编 · 2026 年 10 月 ·
+<a href="https://github.com/liushengliuyun/claude-code-omc-tutorial">GitHub 仓库</a></p>
+</header>
+<section id="sec-cover">
+<section epub:type="titlepage" xmlns:epub="http://www.idpf.org/2007/ops">
+<h1 style="margin-top:35%">指挥AI的艺术</h1>
+<h2>用 Claude Code + OMC 打造持续学习与进化的智能工作流</h2>
+<p style="margin-top:3em; color:#666;">代逸凡 · 编</p>
+<p style="color:#888;">2026 年 10 月</p>
+</section>
+</section>
+<section id="sec-preface">
+<h1>前言：从“敲代码的助手”到“可指挥的团队”</h1>
+
+<p>如果你只是把 Claude Code 当成一个“会聊天的补全工具”，那它大概只发挥了 10% 的能力。真正的差距不在模型本身，而在<strong>你怎么指挥它</strong>：你给它的上下文有多准确、你定义的成功标准有多清晰、你有没有为它建立一套能沉淀经验、越用越聪明的机制。</p>
+
+<p>这本小册子想回答三个问题：</p>
+<ol>
+<li><strong>怎么指挥 AI</strong> —— 怎么写需求、怎么给上下文、怎么定义“做完了”；</li>
+<li><strong>怎么让 AI 持续学习</strong> —— 怎么让它记住你的偏好、你的项目、你踩过的坑，而不是每次对话都从零开始；</li>
+<li><strong>怎么让 AI 进化</strong> —— 怎么把一次性的好经验固化成可复用的技能、工作流和知识库，形成“越用越强”的正循环。</li>
+</ol>
+
+<p>为此我们会以 <strong>oh-my-claudecode（OMC）</strong>插件为主要工具。OMC 是 Claude Code 上的一个多智能体编排层：它把“规划、执行、审查、验证”拆成不同的专职 Agent，把“记忆、技能、知识库”做成可持久化的模块，天然适合搭建这套持续进化的体系。</p>
+
+<h2>本书结构</h2>
+<ul>
+<li><strong>第 1 章</strong> 心智模型：理解 AI 编程助手的正确打开方式</li>
+<li><strong>第 2 章</strong> Claude Code 快速上手：会话、权限、上下文</li>
+<li><strong>第 3 章</strong> 指挥的艺术：需求、上下文与成功标准</li>
+<li><strong>第 4 章</strong> 记忆体系：让 AI 记住你和你的项目</li>
+<li><strong>第 5 章</strong> OMC 入门：多智能体编排</li>
+<li><strong>第 6 章</strong> OMC 核心工作流：plan → execute → review → verify</li>
+<li><strong>第 7 章</strong> 自主模式：autopilot / ralph / ultragoal / team</li>
+<li><strong>第 8 章</strong> 知识沉淀：wiki / remember / deepinit / skillify</li>
+<li><strong>第 9 章</strong> 持续进化的闭环：把经验变成资产</li>
+<li><strong>第 10 章</strong> 实战：从需求到交付的完整演练</li>
+<li><strong>附录</strong> 常用命令速查表</li>
+</ul>
+
+<h2>阅读约定</h2>
+<ul>
+<li>命令和代码用等宽字体，如 <code>claude</code>、<code>/plan</code>；</li>
+<li>终端里以 <code>/</code> 开头的是斜杠命令（在 Claude Code 输入框直接输入）；</li>
+<li>以 <code>omc</code> 开头的是 OMC 的 CLI 命令；</li>
+<li>所有示例都基于 Claude Code CLI + OMC 插件，版本以 2026 年 10 月为准。</li>
+</ul>
+
+<p style="margin-top:2em;">祝指挥愉快。</p>
+</section>
+<section id="sec-ch01">
+<h1>第 1 章 心智模型：AI 是一个"新来的、很聪明但什么都没记住"的同事</h1>
+
+<p>指挥 AI 的所有技巧，都建立在一个准确的心智模型上。请把 Claude Code 想象成一位新来的高级工程师：</p>
+
+<ul>
+<li><strong>他非常聪明</strong>，读过几乎所有的开源代码和文档，写代码、查问题都比大多数人快；</li>
+<li><strong>但他对你的项目一无所知</strong>，不知道你们团队怎么命名、哪些文件碰不得、上周刚踩过什么坑；</li>
+<li><strong>而且他每天早上都失忆</strong>——昨天你们配合得再好，今天他又是"新人"。</li>
+</ul>
+
+<p>一旦接受这个模型，你就明白指挥 AI 的三大任务：</p>
+
+<ol>
+<li><strong>给对上下文</strong>：告诉他是谁、在哪、要干什么。这是"提示词"的本质。</li>
+<li><strong>建立记忆</strong>：把"他每次都要重新知道的东西"写进他会自动读到的文件里，而不是靠聊天里说一遍。</li>
+<li><strong>固化流程</strong>：把配合得好的一次性流程固化成技能和工作流，让他下次不用你重新教。</li>
+</ol>
+
+<p>这三件事分别对应本书的三个主题：指挥、学习、进化。后面所有章节都是这三件事的具体展开。</p>
+
+<h2>1.1 指挥 ≠ 问答，而是"委派 + 验收"</h2>
+
+<p>新手用 AI 的方式是"问答式"：问一句、答一句，AI 每走一步都等你确认。这是最低效的用法。高效的做法是<strong>委派式</strong>：像给下属派活一样，说清目标、边界、验收标准，然后放手让它干，最后验收结果。</p>
+
+<p>两种方式的差别，在任务变大后会被急剧放大。一个"帮我修这个 bug"的问答式对话可能来回十几轮；而一个委派式的指令可以是：</p>
+
+<pre><code>修复背包系统在断线重连后物品数量显示错误的 bug。
+约束:
+- 不要改 UI 布局相关代码
+- 复现路径: 主界面 → 背包 → 断线重连
+验收:
+- 按上述路径复现不再出现错误数量
+- luacheck 通过
+先在计划模式给出修复方案，等我确认后再动手。</code></pre>
+
+<p>注意这段指令里的四个要素：<strong>目标、约束、验收标准、执行方式</strong>。第 3 章会专门展开怎么写这样的指令。</p>
+
+<h2>1.2 上下文是唯一货币</h2>
+
+<p>对 AI 来说，"它知道什么"几乎完全决定了"它能做多好"。它的上下文窗口是有限的，塞进去的每一条信息都在争夺空间。所以指挥 AI 的一半功夫在<strong>管理上下文</strong>：</p>
+
+<ul>
+<li><strong>该给的要给</strong>：项目约定、领域知识、踩坑记录，要写进它每次都会读的文件（第 4 章）；</li>
+<li><strong>不该给的别塞</strong>：几千行的日志、无关文件的内容，直接丢进对话只会稀释重点。要学会用搜索、摘要、文件路径代替原文粘贴。</li>
+</ul>
+
+<h2>1.3 单体 → 编排：为什么需要 OMC</h2>
+
+<p>当任务小的时候，一个 Claude Code 会话就够了。但当任务变成"重构一个模块"这种规模，单体会话的问题暴露出来：上下文越长越贵、越慢，而且"自己写自己查"容易既当运动员又当裁判。</p>
+
+<p>OMC 的解法是<strong>分工</strong>：主会话负责理解你的意图、拆解任务、把控方向（当好"指挥官"），具体执行交给专职 Agent——规划找 planner、写代码找 executor、审查找 code-reviewer、验收找 verifier。这就像一个技术负责人不再亲自写每一行代码，而是带一个各司其职的团队。</p>
+
+<p>记住这句话：<strong>你的角色升级了——从"程序员"升级为"技术负责人 + 教练"</strong>。你不再写每一行代码，而是：定目标、给上下文、验收结果、并且不断把好的经验沉淀下来教给团队。</p>
+
+</section>
+<section id="sec-ch02">
+<h1>第 2 章 Claude Code 快速上手</h1>
+
+<p>本章把后面会用到的 Claude Code 基础能力过一遍。已经熟练的读者可以直接跳到第 3 章。</p>
+
+<h2>2.1 安装与启动</h2>
+
+<pre><code>npm install -g @anthropic-ai/claude-code   # 安装
+claude                                     # 在项目根目录启动
+claude -p "总结这个仓库的结构"               # 非交互模式(适合脚本调用)
+claude --resume                            # 恢复上一次会话</code></pre>
+
+<h2>2.2 会话即工作区</h2>
+
+<p>Claude Code 的基本单位是<strong>会话</strong>。你在一个终端里和它对话，它可以读写文件、执行命令、搜索代码。启动后它会自动读取以下上下文（按优先级）：</p>
+
+<table>
+<tr><th>文件</th><th>作用</th></tr>
+<tr><td><code>~/.claude/CLAUDE.md</code></td><td>全局个人指令，所有项目生效</td></tr>
+<tr><td><code>项目根/CLAUDE.md</code></td><td>项目指令，随代码入库，团队共享</td></tr>
+<tr><td><code>项目根/AGENTS.md</code></td><td>给子智能体/其他工具读的项目说明</td></tr>
+<tr><td><code>.claude/settings.json</code></td><td>权限、hooks 等行为配置</td></tr>
+</table>
+
+<p>所以"每次都要重复说的话"，正确做法不是每次打一遍，而是写进上面这些文件。这是第 4 章记忆体系的入口。</p>
+
+<h2>2.3 交互基本功</h2>
+
+<ul>
+<li><strong>斜杠命令</strong>：输入框里 <code>/</code> 开头，如 <code>/clear</code>（清空上下文开新任务）、<code>/compact</code>（压缩历史省 token）、<code>/model</code>（切换模型档位）、<code>/resume</code>、<code>/config</code>；</li>
+<li><strong>计划模式</strong>：Shift+Tab 切换到 Plan Mode，AI 只探索和出方案不动代码，适合任何非琐碎改动；</li>
+<li><strong>打断与纠偏</strong>：随时 Esc 打断，说"不对，方向错了"比让它跑完再返工便宜得多；</li>
+<li><strong>Esc 退 Esc 进</strong>：连按两次 Esc 回退到历史某条消息，从那里重新指挥，而不是道歉后继续；</li>
+<li><strong>@文件引用</strong>：输入 <code>@</code> 可以精确引用文件，把上下文指给它，而不是复制粘贴内容。</li>
+</ul>
+
+<h2>2.4 权限模型</h2>
+
+<p>Claude Code 的每个敏感操作（写文件、执行命令）都会请求许可，权限模式有：</p>
+
+<ul>
+<li><strong>默认模式</strong>：每步询问，最安全也最累；</li>
+<li><strong>自动接受编辑（acceptEdits）</strong>：文件编辑自动通过，命令仍询问——日常开发推荐；</li>
+<li><strong>计划模式</strong>：只读不动手，出方案；</li>
+<li><strong>bypassPermissions</strong>：全放行，只在你完全信任的任务里用（比如让它自己跑测试循环）。</li>
+</ul>
+
+<p>可以配置白名单减少询问频率（<code>.claude/settings.json</code> 的 permissions 段，或用 <code>/fewer-permission-prompts</code> 技能自动扫描并生成白名单）。原则：<strong>读操作大胆放行，写操作和破坏性命令保持确认</strong>。</p>
+
+<h2>2.5 Hooks：在关键节点安插你的规则</h2>
+
+<p>Hooks 是 Claude Code 的钩子机制：在工具调用前后、会话开始等时机自动执行你定义的动作，比如：提交前强制跑 lint、把输出重定向到摘要工具、注入提醒。配置在 <code>settings.json</code> 里。当你发现"我每次都要口头提醒 AI 某件事"时，就该考虑把它做成 hook——<strong>口头提醒会忘，钩子不会</strong>。</p>
+
+<h2>2.6 子智能体</h2>
+
+<p>复杂任务可以派生子智能体（subagent）：让一个独立上下文的 Claude 去搜代码、做研究、写方案，只把结论带回主会话。这样可以避免主会话被海量中间输出撑爆。OMC 本质上就是把这套机制产品化成一个完整的 agent 目录（第 5 章）。</p>
+
+</section>
+<section id="sec-ch03">
+<h1>第 3 章 指挥的艺术：需求、上下文与成功标准</h1>
+
+<p>同一件事，指挥得好十分钟后完成，指挥得不好反复返工一下午。本章给出一套可直接套用的"委派指令"写法。</p>
+
+<h2>3.1 委派指令四要素</h2>
+
+<p>一条好的委派指令 = <strong>目标 + 约束 + 验收标准 + 执行方式</strong>。</p>
+
+<table>
+<tr><th>要素</th><th>回答的问题</th><th>反例</th><th>正例</th></tr>
+<tr><td>目标</td><td>做什么</td><td>"优化一下背包"</td><td>"修复背包断线重连后数量显示错误"</td></tr>
+<tr><td>约束</td><td>不能做什么</td><td>(无)</td><td>"不改 UI 布局；不动 DataAccess 生成代码"</td></tr>
+<tr><td>验收</td><td>怎么算做完</td><td>"做好点"</td><td>"复现路径不再出错；luacheck 通过"</td></tr>
+<tr><td>执行方式</td><td>过程怎么控制</td><td>(无)</td><td>"先计划模式出方案，确认后再改"</td></tr>
+</table>
+
+<p>其中<strong>验收标准</strong>最容易被忽略、也最有杠杆。把"修好这个 bug"翻译成"先写一个能复现它的测试，然后让它通过"，AI 就能自己循环直到达标，不需要你每一步盯着。模糊的验收标准 = 你自己变成了验收标准，每一步都得你确认。</p>
+
+<h2>3.2 不同规模的任务，不同的指挥粒度</h2>
+
+<h3>琐碎任务：一句话</h3>
+<pre><code>把这个文件里的 var 全部改成 const</code></pre>
+<p>直接干，别过度规划。用判断力，别用流程。</p>
+
+<h3>中小任务：目标 + 验收</h3>
+<pre><code>给聊天系统加"撤回消息"功能，2 分钟内的消息可以撤回。
+- 参考 UIGoodsBuy 的 MVVM 写法(InitVM/InitBinds/InitEvents)
+- 验收: 本地起服务自测通过 + luacheck 无报错
+- 先列改动计划再动手</code></pre>
+
+<h3>大任务：分阶段 + 关卡确认</h3>
+<p>超过半天的任务，不要一口气委派。拆成阶段，每个阶段一个可验收的交付物：</p>
+<pre><code>阶段1: 只做调研，输出方案文档(.omc/plans/xxx.md)，不要改任何代码
+阶段2: 按方案实现核心链路，跑通最小闭环
+阶段3: 补全边角 + 自测 + 让 code-reviewer 审查</code></pre>
+<p>每个阶段结束你验收一次，方向对了再继续。<strong>方向错误是最大的浪费，关卡确认是买保险。</strong></p>
+
+<h2>3.3 让 AI 主动暴露不确定性</h2>
+
+<p>好的指挥者会强制 AI"先想后做"。几个有效的指令模式：</p>
+
+<ul>
+<li>"<strong>先陈述你的假设</strong>，有不确定的先问，不要猜"；</li>
+<li>"如果有多种实现方式，<strong>列出来给我选</strong>，不要默默挑一个"；</li>
+<li>"如果有更简单的做法，<strong>直接说服我</strong>"；</li>
+<li>"<strong>修 bug 前先追踪完整调用链</strong>，别套用第一个看起来合理的修法"。</li>
+</ul>
+
+<p>这些模式值得写进项目的 <code>CLAUDE.md</code>/行为准则里，让它们成为默认行为而不是每次口头要求。本书附录里的行为准则模板可以直接抄。</p>
+
+<h2>3.4 反模式清单</h2>
+
+<table>
+<tr><th>反模式</th><th>后果</th><th>替代</th></tr>
+<tr><td>"帮我做个 XXX"(无上下文无验收)</td><td>AI 猜需求，大方向跑偏</td><td>四要素齐全，或先用计划模式对齐方案</td></tr>
+<tr><td>一次委派三天的工作量</td><td>上下文爆掉，后半程质量崩</td><td>拆阶段，关卡确认</td></tr>
+<tr><td>AI 说"完成了"就信</td><td>半成品、带病上线</td><td>要求给出验证证据(测试输出/构建日志)</td></tr>
+<tr><td>贴几千行日志进对话</td><td>上下文被垃圾淹没</td><td>给文件路径让它自己查，或先摘要</td></tr>
+<tr><td>发现方向错了还让它继续</td><td>错上加错，返工翻倍</td><td>立刻 Esc 打断，纠正或回退重来</td></tr>
+</table>
+
+<h2>3.5 一个心态：你负责"对"，AI 负责"快"</h2>
+
+<p>AI 的生成速度是你的几百倍，所以<strong>方向性错误的成本主要由你承担</strong>。别吝啬前期的两分钟对齐：先看它的计划、先确认假设，比事后返工便宜十倍。反过来，方向确认之后就不要步步紧盯着——委派出去，等验收结果。</p>
+
+</section>
+<section id="sec-ch04">
+<h1>第 4 章 记忆体系：让 AI 记住你和你的项目</h1>
+
+<p>回忆第 1 章的心智模型："每天失忆的聪明同事"。治愈失忆的办法不是反复口头解释，而是<strong>建立一套分层的、AI 会自动读取的记忆体系</strong>。本章按"离 AI 由远到近"介绍各层。</p>
+
+<h2>4.1 五层记忆，各司其职</h2>
+
+<table>
+<tr><th>层</th><th>载体</th><th>放什么</th><th>谁维护</th></tr>
+<tr><td>全局个人层</td><td><code>~/.claude/CLAUDE.md</code></td><td>你的通用偏好、工作习惯</td><td>你</td></tr>
+<tr><td>项目共享层</td><td><code>项目/CLAUDE.md</code>、<code>AGENTS.md</code></td><td>项目架构、规范、领域知识、踩坑规则</td><td>团队(随代码入库)</td></tr>
+<tr><td>自动记忆层</td><td>auto-memory(<code>~/.claude/projects/&lt;proj&gt;/memory/</code>)</td><td>会话中发现的关键事实、纠偏、项目状态</td><td>AI 在对话中自动读写</td></tr>
+<tr><td>项目运维层</td><td>OMC: notepad / project-memory / state</td><td>优先上下文、工作笔记、编排状态</td><td>AI + 你</td></tr>
+<tr><td>知识库层</td><td>OMC: wiki(.omc/wiki/*.md)</td><td>架构决策、调试案例、约定、经验文章</td><td>AI + 你</td></tr>
+</table>
+
+<h2>4.2 CLAUDE.md 怎么写才有效</h2>
+
+<p>CLAUDE.md 是杠杆率最高的一层记忆。写得好，AI 的输出质量上一个台阶；写得差(或者堆满 AI 生成的水话)，反而稀释重点。几条原则：</p>
+
+<ul>
+<li><strong>写"AI 猜不到的东西"</strong>：构建命令、目录结构、特殊约定、易错点。"请写出高质量代码"这类话毫无价值；</li>
+<li><strong>写"规则"而不是"描述"</strong>："控制器由框架缓存，不要在 Awake() 里手动缓存" 比 "控制器会被缓存" 有效得多；</li>
+<li><strong>写"为什么"</strong>：踩坑规则要带上后果，比如"漏传 <code>_L()</code> 的格式参数会导致运行时报错"；</li>
+<li><strong>控制长度</strong>：它每次对话都会被读入，只放高频使用的核心内容；低频知识放 wiki，按需查。</li>
+</ul>
+
+<h2>4.3 auto-memory：会话中的自动沉淀</h2>
+
+<p>Claude Code 有一个每项目独立的自动记忆目录。当你在对话中说"记住：配置表只能改 Excel 再导出，不许直接动 Luban 产物"，AI 会把它写成一条结构化记忆，并在未来相关对话中自动调出。适合存：</p>
+
+<ul>
+<li>你的纠偏("以后这类问题先给我方案再动手")；</li>
+<li>跨会话的项目状态("X 功能分支进行中，下一步是 Y")；</li>
+<li>环境怪癖("这台机器 git 外网被拦，装东西走内网镜像")。</li>
+</ul>
+
+<p>经验法则：<strong>口头说一遍就丢的信息不值得记；让你说过第二遍的信息值得写进记忆。</strong></p>
+
+<h2>4.4 OMC 的项目运维层</h2>
+
+<p>OMC 在项目里维护一个 <code>.omc/</code> 状态根，其中和记忆相关的有：</p>
+
+<ul>
+<li><strong>notepad</strong>：分区的工作笔记。优先上下文区(Priority)每次会话必读，适合放"当前最重要的事"；Working 区放临时状态(7 天自动过期)；Manual 区永不清理；</li>
+<li><strong>project memory</strong>：结构化的项目记忆(技术栈/构建/约定/架构笔记/常备指令)，适合放"常备指令"(比如"所有改动必须过 code-reviewer")；</li>
+<li><strong>state</strong>：各编排模式(autopilot/ralph/team...)的进行时状态，中断后可恢复。</li>
+</ul>
+
+<h2>4.5 知识库层：wiki</h2>
+
+<p>低频但重要的知识——架构决策、一次艰难的调试复盘、团队约定——放 CLAUDE.md 太占上下文，丢了又可惜。OMC 的 wiki skill 在 <code>.omc/wiki/</code> 维护一组带分类、标签、交叉引用的 markdown 页面，AI 可以写入也可以检索。它的设计目标是<strong>跨会话复利</strong>：每次踩坑复盘写一页，一年后这个知识库就是团队的隐形资产。</p>
+
+<h2>4.6 AGENTS.md 与 deepinit</h2>
+
+<p><code>AGENTS.md</code> 是给子智能体和第三方工具读的项目说明书。OMC 的 deepinit skill 可以扫描整个代码库，分层生成层级化的 AGENTS.md 文档树(根目录总览 + 各子目录的局部说明)，一次初始化，后续增量维护。新项目接手时先跑一次 deepinit，能显著降低 AI 的探索成本。</p>
+
+<h2>4.7 记忆的维护：会腐烂，要修剪</h2>
+
+<ul>
+<li>发现某条记忆过时/错误，让 AI 当场更正或删除；</li>
+<li>CLAUDE.md 超过几百行就该"降级"：高频留原地，低频移去 wiki；</li>
+<li>记忆冲突时，新信息覆盖旧信息，并记下"为什么改"。</li>
+</ul>
+
+</section>
+<section id="sec-ch05">
+<h1>第 5 章 OMC 入门：多智能体定义与路由</h1>
+
+<p>oh-my-claudecode(OMC)是一个 Claude Code 插件，把单个 AI 会话升级成一支"虚拟团队"。本章介绍它的角色分工与路由逻辑。</p>
+
+<h2>5.1 OMC 是什么</h2>
+
+<p>OMC 的核心思想：<strong>作者和审查者分离，规划和执行分离</strong>。主会话作为"指挥官"不亲自下场写代码，而是把工作路由给专职 Agent，每个 Agent 用适合其任务的模型档位运行：</p>
+
+<table>
+<tr><th>角色</th><th>Agent</th><th>模型档位</th><th>职责</th></tr>
+<tr><td>规划</td><td>planner / architect</td><td>Opus</td><td>把模糊需求变成可执行计划</td></tr>
+<tr><td>执行</td><td>executor</td><td>Sonnet</td><td>按计划实现，复杂任务可上调</td></tr>
+<tr><td>审查</td><td>code-reviewer / critic</td><td>Opus</td><td>独立审查，不和作者混用上下文</td></tr>
+<tr><td>验证</td><td>verifier</td><td>按规模选档</td><td>用证据确认"真的做完了"</td></tr>
+</table>
+
+<p>除此之外还有专家位：debugger(根因分析)、tracer(证据驱动的调用链追踪)、test-engineer、document-specialist(查外部文档)、designer、writer、git-master、explore 探索位，以及游戏项目里的"配置策划"子智能体(负责 Excel 配置表操作)。</p>
+
+<h2>5.2 模型路由：好钢用在刀刃上</h2>
+
+<p>OMC 的原则是"按任务难度配算力"：</p>
+
+<ul>
+<li><strong>haiku</strong>：查路径、改文案这类秒级任务；</li>
+<li><strong>sonnet</strong>：标准实现、常规改动；</li>
+<li><strong>opus</strong>：架构分析、深度审查、疑难调试；</li>
+<li><strong>fable</strong>：最难的问题。</li>
+</ul>
+
+<p>对话里直接说"用 opus 深入分析"即可覆盖默认路由。</p>
+
+<h2>5.3 标准协作流程</h2>
+
+<p>一个完整的 OMC 委派长这样：</p>
+
+<pre><code>你: 用 plan 模式调研"聊天撤回"需求，输出计划
+AI: 派 planner/architect 出方案 → 你确认方案,不是确认细节
+你: 执行这个计划
+AI: 派 executor 实现 → 派 code-reviewer 发现2处中等问题 → executor 修复
+AI: 派 verifier 收集测试/构建证据 → 汇报
+你: 验收 + 决定是否提交</code></pre>
+
+<p>关键设计：<strong>审查者不复用作者的上下文</strong>。executor 写完的代码，由一个没有"作者滤镜"的 code-reviewer 在独立上下文里重新读一遍。这解决了单体 AI"自己写自己夸"的问题。</p>
+
+<h2>5.4 什么时候不编排</h2>
+
+<p>编排有开销(多智能体各带一份上下文，更慢更贵)。简单任务直接让主会话干反而快。经验阈值：</p>
+
+<ul>
+<li>改动 ≤ 3 个文件、一次对话能完成 → 主会话直接干；</li>
+<li>多文件/重构/疑难 debug/需要独立审查 → 编排；</li>
+<li>整条链路你都不用盯 → 用第 7 章的自主模式。</li>
+</ul>
+
+<h2>5.5 安装与检查</h2>
+
+<pre><code>/plugin install oh-my-claudecode      # 插件市场安装
+/oh-my-claudecode:omc-setup           # 刷新安装与配置
+/oh-my-claudecode:omc-doctor          # 诊断安装问题
+/oh-my-claudecode:cancel              # 取消任何正在运行的 OMC 模式
+DISABLE_OMC=1                         # 环境变量开关,一键停用</code></pre>
+
+</section>
+<section id="sec-ch06">
+<h1>第 6 章 OMC 核心工作流：plan → execute → review → verify</h1>
+
+<p>这是 OMC 的"正字法"流程，也是日常 80% 的委派都应该走的路。四个阶段各由一个专职 Agent 负责，你只在关卡处确认。</p>
+
+<h2>6.1 全景图</h2>
+
+<pre><code>需求
+ │
+ ▼
+plan(规划)     planner/architect 出方案 → 你确认方向,不必逐行看
+ │
+ ▼
+execute(执行)  executor 按计划实现,每步带验证点
+ │
+ ▼
+review(审查)   code-reviewer 独立上下文审查,按严重度分级报告
+ │
+ ▼
+verify(验证)   verifier 收集证据:测试/构建/复现,确认"真的做完了"
+ │
+ ▼
+你验收 → 提交</code></pre>
+
+<p>记住一条主线:<strong>每个阶段的产出就是下一阶段的输入</strong>。计划文档喂给 executor,实现结果喂给 reviewer,review 后的最终态喂给 verifier。</p>
+
+<h2>6.2 plan:先对齐方向,再谈实现</h2>
+
+<p>调用 <code>/oh-my-claudecode:plan</code>(或对话里说"用 OMC plan 流程")。规划 Agent 会:</p>
+
+<ul>
+<li>探索代码库、读 CLAUDE.md/AGENTS.md、必要时问澄清问题(OMC 还有 deep-interview/ralplan 两个专门的深度澄清入口,适合需求非常模糊时);</li>
+<li>产出一份计划文档(通常落在 <code>.omc/plans/</code>);</li>
+<li>你重点审:目标对不对、边界清不清、有没有漏掉关键约束、验证方式是否可信。</li>
+</ul>
+
+<p><strong>关卡原则:确认方案,不确认细节。</strong>方向和边界你把关;类怎么拆、函数叫什么名字,放手让 AI 定。</p>
+
+<p><strong>红线:计划未确认前不许写代码。</strong>在指令里明确"先出计划,等我确认再动手"。</p>
+
+<h2>6.3 execute:带验证点的执行</h2>
+
+<p>调用 <code>/oh-my-claudecode:execute</code>。executor 拿着已确认的计划分步实现,要点:</p>
+
+<ul>
+<li>复杂实现显式说"executor 用 opus";</li>
+<li>要求每步给出验证证据,不要"看起来写完了"就进下一阶段;</li>
+<li>执行中发现计划有误,让它停下来报告,而不是擅自改方向。</li>
+</ul>
+
+<h2>6.4 review:独立上下文的作者-审查者分离</h2>
+
+<p>调用 <code>/oh-my-claudecode:review</code>(OMC 的审查技能)。code-reviewer 在一个<strong>全新的上下文</strong>里重新读改动:</p>
+
+<ul>
+<li>按严重度分级(critical/major/minor)给出结构化报告;</li>
+<li>审查范围三选一:工作区 diff、指定分支/PR、最近提交;</li>
+<li>报告直接给到文件:行号,便于 executor 修复;</li>
+<li>审查报告也喂给 executor 修复,修完再审,直到无 critical/major。</li>
+</ul>
+
+<h2>6.5 verify:用证据说话</h2>
+
+<p>调用 <code>/oh-my-claudecode:verify</code>。verifier 的工作是回答一个问题:<strong>"你怎么知道它真的能跑?"</strong></p>
+
+<ul>
+<li>小改动:跑一遍 luacheck/单元测试即可;</li>
+<li>标准:构建 + 测试 + 关键路径手工复现;</li>
+<li>安全相关:让 security-reviewer 单独过一遍。</li>
+</ul>
+
+<p>验收时要求 AI 汇报"验证证据"(命令与输出摘要),而不是"我觉得完成了"。这是防止"AI 自称完成"的第一道防线。</p>
+
+<h2>6.6 把流程变成肌肉记忆</h2>
+
+<p>日常使用不需要记命令——把这套流程写进 CLAUDE.md 的协作约定里,例如:</p>
+
+<pre><code>## 协作约定
+- 非琐碎改动先 plan 后 execute
+- review 必须走独立上下文的 code-reviewer,不允许自查自审
+- 完成前必须 verify,汇报验证证据
+- 提交信息格式: 类型: 描述</code></pre>
+
+<p>写进文件的记忆 > 对话里的口头要求。</p>
+
+</section>
+<section id="sec-ch07">
+<h1>第 7 章 自主模式：autopilot / ralph / ultragoal / team</h1>
+
+<p>编排流程里你还要在关卡确认方案、验收结果。自主模式更进一步：<strong>你只给定目标，AI 自己规划、执行、验证、循环，直到完成或被你叫停。</strong>适合"你不用中途盯"的任务：大重构、批量迁移、长测试循环。</p>
+
+<h2>7.1 autopilot：全自动驾驶</h2>
+
+<p>说 "autopilot" 或调用 <code>/oh-my-claudecode:autopilot</code>，给一句话目标：</p>
+
+<pre><code>autopilot: 把 LuaScripts 里所有 TODO 注释清理干净，
+每处要么实现要么升级为明确 issue 提示，保持 luacheck 通过</code></pre>
+
+<p>它自动走 plan → execute → review → verify 全链路，无需关卡确认。适合<strong>边界清晰、验收可自动化</strong>的任务。若验收不可自动化，不要用 autopilot。</p>
+
+<h2>7.2 ralph：循环直到完成</h2>
+
+<p>ralph 技能实现"循环直到完成"：给一个任务，它反复迭代（规划→执行→验证→自我修正），可配置一个审查者 Agent 做完成判定。适合有明确终点的长循环，比如"迁移完这 50 个文件"。</p>
+
+<h2>7.3 ultragoal：持久多目标台账</h2>
+
+<p>ultragoal 把目标写成持久化的计划/台账文件（<code>.omc/ultragoal/</code>），跨会话追踪多个目标的进度，适合长周期项目。</p>
+
+<h2>7.4 team：多 Agent 协同</h2>
+
+<p><code>/oh-my-claudecode:team</code> 显式启动 N 个 Agent 协同处理共享任务列表。适合大任务需要并行分工（比如同时调研 3 个模块）。</p>
+
+<h2>7.5 怎么选模式</h2>
+
+<table>
+<tr><th>场景</th><th>推荐</th><th>原因</th></tr>
+<tr><td>边界清晰、验收可自动化</td><td>autopilot</td><td>全链路无人值守</td></tr>
+<tr><td>明确终点的长循环（迁移/批量）</td><td>ralph</td><td>循环直到完成判定通过</td></tr>
+<tr><td>长周期多目标</td><td>ultragoal</td><td>持久台账跨会话追踪</td></tr>
+<tr><td>大任务并行分工</td><td>team</td><td>共享任务列表</td></tr>
+<tr><td>需求模糊</td><td>plan / deep-interview / ralplan</td><td>先澄清再执行</td></tr>
+<tr><td>研究型问题</td><td>research</td><td>有出处的调研报告</td></tr>
+</table>
+
+<p>所有模式可随时 <code>/oh-my-claudecode:cancel</code> 取消并清理状态。</p>
+
+<h2>7.6 自主模式的护栏</h2>
+
+<ul>
+<li><strong>只在验收可自动化时用</strong>：自主模式最大的风险是"在错误的路上跑很远"，护栏是机器可判定的验收标准；</li>
+<li><strong>给足上下文再放行</strong>：启动前写清约束（"不要动 DataAccess 生成代码"、"不要 push"），自主模式下你说不上一句话；</li>
+<li><strong>用 git 兜底</strong>：放行前工作区干净、分支正确，出问题可整体回滚；</li>
+<li><strong>设上限</strong>：例如"最多迭代 10 轮，超了停下汇报"。</li>
+</ul>
+
+</section>
+<section id="sec-ch08">
+<h1>第 8 章 知识沉淀：wiki / remember / deepinit / skillify</h1>
+
+<p>第 4 章讲了"记忆"——记住事实和纠偏。本章讲更进一步的事：<strong>把经验变成可复用资产</strong>，这是"AI 进化"的核心机制。</p>
+
+<h2>8.1 从经验到资产：三级火箭</h2>
+
+<pre><code>一次好经验
+  →(wiki)     知识页,可检索,跨会话复用
+  →(skillify) 技能草稿,固化成可调用技能
+  →(skill)    正式技能,斜杠命令触发,团队共享</code></pre>
+
+<h2>8.2 wiki：团队知识库</h2>
+
+<p>"LLM Wiki"的核心论点：让 AI 自己维护一个 markdown 知识库，把每个值得记住的东西写成页面，带分类、标签、交叉引用，让知识产生复利。OMC 的 wiki skill 实现了这一点：</p>
+
+<ul>
+<li><code>/oh-my-claudecode:wiki</code> 写入/更新页面（合并策略是追加，从不静默覆盖）；</li>
+<li>工作过程中 AI 可以自动沉淀（调试复盘写成 debugging 类页面）；</li>
+<li>检索时 AI 按关键词/标签查询，把结论带回对话。</li>
+</ul>
+
+<h2>8.3 remember：决定什么值得记、记在哪层</h2>
+
+<p><code>/oh-my-claudecode:remember</code> 不是"什么都存"的仓库，而是一次<strong>知识分类决策</strong>：会话里出现一条值得保留的知识，先判断它属于哪一层。</p>
+
+<table>
+<tr><th>层</th><th>放什么</th></tr>
+<tr><td>CLAUDE.md / AGENTS.md</td><td>每次对话都要生效的规则</td></tr>
+<tr><td>project memory / notepad</td><td>项目运行时状态、常备指令</td></tr>
+<tr><td>wiki</td><td>低频但重要的知识、复盘文章</td></tr>
+<tr><td>skill</td><td>重复流程的自动化封装</td></tr>
+</table>
+
+<p>分类错层会浪费：规则进 wiki 会被忽略，知识进 CLAUDE.md 会稀释上下文。<strong>选层就是设计。</strong></p>
+
+<h2>8.4 skillify：把会话里的好流程固化成技能</h2>
+
+<p>skillify 把会话中摸索出的好流程起草成技能草稿（触发词、步骤、验证方式），你审阅后正式启用。此后一个斜杠命令即可重放整个流程。</p>
+
+<p><strong>这正是"AI 进化"最直接的形式：AI 把自己摸索出的流程沉淀成自己的技能。</strong></p>
+
+<h2>8.5 deepinit：给新项目做"入职体检"</h2>
+
+<p>OMC 的 deepinit 生成带增量维护的分层 AGENTS.md 文档树。新接手项目或冷启动时跑一次，后续结构变化时增量更新，子智能体的探索成本显著下降。</p>
+
+<h2>8.6 沉淀的时机判断</h2>
+
+<p>不是所有东西都值得沉淀。三个判断标准：</p>
+
+<ul>
+<li><strong>第二遍</strong>：同一件事你解释了第二遍 → 值得记；</li>
+<li><strong>30 分钟</strong>：排障超过 30 分钟 → 值得写一页 wiki 复盘；</li>
+<li><strong>第三遍</strong>：同一流程手工走了第三遍 → skillify 技能化。</li>
+</ul>
+
+<p>口诀：<strong>"第二遍记忆、30 分钟复盘、第三遍技能化"。</strong>用这套标准，知识库不会变成垃圾场。</p>
+
+</section>
+<section id="sec-ch09">
+<h1>第 9 章 持续进化的闭环</h1>
+
+<p>前面章节的零件都齐了。本章把它们组装成一个可运转的"进化系统"：<strong>反馈 → 记忆 → 技能 → 工作流固化</strong>。</p>
+
+<h2>9.1 进化闭环的四个环节</h2>
+
+<p>把指挥、记忆、编排、沉淀四个机制连成一个环：</p>
+
+<pre><code>干活(委派/编排/自主模式)
+  ↓
+反馈(验收中发现问题,或说"不对,应该……")
+  ↓
+沉淀(第二遍记忆 / 30分钟复盘进 wiki / 第三遍 skillify)
+  ↓
+下一轮自动生效(记忆自动读取,技能直接调用)
+  ↓
+干活 ……</code></pre>
+
+<p>判断你的体系是否在进化，看两个信号：</p>
+
+<ol>
+<li><strong>重复解释变少</strong>：同一个纠偏你说第二遍时，AI 应该已经记住了；</li>
+<li><strong>流程重放</strong>：以前手工走的流程，现在一句话重放。</li>
+</ol>
+
+<h2>9.2 三种时间尺度的"学习"</h2>
+
+<table>
+<tr><th>时间尺度</th><th>机制</th><th>动作</th></tr>
+<tr><td>会话内</td><td>上下文 + 纠偏</td><td>Esc 打断、双击 Esc 回退、当场纠正</td></tr>
+<tr><td>会话间</td><td>五层记忆体系(第 4 章)</td><td>说"记住:……"或跑 remember 分类决策</td></tr>
+<tr><td>长期</td><td>skillify / wiki / CLAUDE.md 修订</td><td>把流程固化,把规则修订进文件</td></tr>
+</table>
+
+<h2>9.3 进化日志模板</h2>
+
+<p>建议每次"值得记的反馈"都追加一条日志(可放 wiki 的 session-log 类别)：</p>
+
+<pre><code>## 2026-10-11  背包断线重连 bug
+- 现象: 重连后物品数量显示错误
+- 根因: 配置读取没走缓存层
+- 纠偏: "修 bug 先追踪完整调用链再修" —— 已写入 CLAUDE.md
+- 沉淀: wiki/debugging-backpack-reconnect.md</code></pre>
+
+<p>三个信号说明你没有在进化：</p>
+
+<ul>
+<li>同一个纠偏说第三遍还不生效 → 记忆层选错了，检查该进 CLAUDE.md 的规则是不是进了 wiki；</li>
+<li>AI 反复犯同类错 → 缺少机器可判定的验收标准；</li>
+<li>流程依赖你全程盯守 → 该 skillify 或上自主模式。</li>
+</ul>
+
+<h2>9.4 团队层面的进化</h2>
+
+<p>个人进化靠记忆，团队进化靠<strong>随代码入库的共享文件</strong>：项目 CLAUDE.md/AGENTS.md、wiki、技能都在仓库里，新人(和他们的 AI)第一天就继承全部经验。团队约定示例：</p>
+
+<ul>
+<li>踩坑必须写 wiki 调试复盘页；</li>
+<li>重复流程一律 skillify 固化；</li>
+<li>CLAUDE.md 修订走 PR 评审，像代码一样对待。</li>
+</ul>
+
+</section>
+<section id="sec-ch10">
+<h1>第 10 章 实战：从需求到交付的完整演练</h1>
+
+<p>用一个贴近本书写作环境的例子串起全书：给一个 Unity 手游客户端加"聊天撤回"功能。例子中的技术点来自真实项目的 CLAUDE.md 约定。</p>
+
+<h2>10.1 需求 → 委派指令</h2>
+
+<p>产品说"加个消息撤回"。直接转述给 AI 是反模式。先按四要素翻译成委派指令：</p>
+
+<pre><code>功能: 聊天系统加"撤回消息",发出后 2 分钟内可撤回。
+约束:
+- 遵守项目 CLAUDE.md 的 MVVM 三件套(InitVM/InitBinds/InitEvents)
+- 不改 UI 布局文件,只改 Lua 逻辑层
+验收:
+- 发消息→撤回→对方不再显示,本地服务自测通过
+- luacheck 无新增告警
+执行方式:
+- 非琐碎改动: 先 plan 后 execute
+- review 走独立上下文的 code-reviewer</code></pre>
+
+<p>注意两点：<strong>约束里直接引用 CLAUDE.md 的已有约定</strong>(不用重新解释)；<strong>验收里写明复现路径</strong>。</p>
+
+<h2>10.2 plan 阶段</h2>
+
+<p>切换计划模式(或 <code>/oh-my-claudecode:plan</code>)。AI 探索代码库后给出方案：</p>
+
+<ul>
+<li>聊天 UI 在 <code>UI/Chat/UIChatMain.lua</code>,消息数据在 <code>_G.Root.Chat</code>,撤回需要客户端标记 + 服务器广播；</li>
+<li>方案：协议加撤回请求/广播 → Mediator 处理 → VM 标记消息状态 → UI 订阅变化刷新列表。</li>
+</ul>
+
+<p>你审方案的三件事：目标对不对、边界清不清、验证方式是否可信。确认后进入执行。</p>
+
+<h2>10.3 execute 阶段</h2>
+
+<p><code>/oh-my-claudecode:execute</code>。executor 按计划实现：</p>
+
+<ol>
+<li>协议层：撤回请求 + 广播消息定义；</li>
+<li>Mediator：<code>_G.MediatorChat:RecallMessage(msgId)</code>，更新 <code>_G.Root.Chat</code>；</li>
+<li>UI 层：UIChatMain 订阅消息变更，撤回的条目渲染为提示文案。</li>
+</ol>
+
+<p>每步要求验证证据。执行中发现协议字段和服务器对不上，AI 停下来报告而不是硬编——这正是 3.3 节"先想后做"约定的作用。</p>
+
+<h2>10.4 review + verify 阶段</h2>
+
+<p>code-reviewer 在独立上下文里审出两个问题：</p>
+
+<ul>
+<li>撤回计时器没用 <code>self:StartTimer</code>，普通 <code>_G.Timer.Add</code> 在 UI 关闭后不会自动清理 → major；</li>
+<li>本地化文案 <code>_L("CHAT_RECALL")</code> 没检查是否带格式参数 → minor。</li>
+</ul>
+
+<p>executor 修复后复审通过。verifier 汇报验证证据：luacheck 零告警、自测录像/截图、边界用例(恰好在 2 分钟边缘撤回)。</p>
+
+<p>你验收后提交：</p>
+
+<pre><code>git add -p   # 逐块检查,只提交本功能相关改动
+git commit   # "聊天: 新增消息撤回功能"</code></pre>
+
+<h2>10.5 交付后:沉淀</h2>
+
+<p>收尾不是提交完就完。按第 8 章标准做沉淀：</p>
+
+<ul>
+<li>过程中"配置表必须先改 Excel 再导出"说到了第二遍 → 写入项目记忆/CLAUDE.md；</li>
+<li>排障 35 分钟的"撤回广播与重连时序问题" → 写一页 wiki debugging 复盘;</li>
+<li>"日报流程"已经手工走过三遍 → 下次用 skillify 固化。</li>
+</ul>
+
+<h2>10.6 复盘:本次指挥的得失</h2>
+
+<table>
+<tr><th>做得好</th><th>因为</th></tr>
+<tr><td>四要素指令 + 关卡确认</td><td>方向错误为零,返工只有一次小修</td></tr>
+<tr><td>review 走独立上下文</td><td>抓到了作者自己看不见的清理类问题</td></tr>
+<tr><td>要求验证证据</td><td>没有依赖"AI 自称完成"</td></tr>
+<tr><th>可以更好</th><th>因为</th></tr>
+<tr><td>验收里漏了"重连后撤回状态正确"用例</td><td>边界用例在 review 阶段才补上</td></tr>
+</table>
+
+</section>
+<section id="sec-appendix">
+<h1>附录 常用命令速查表</h1>
+
+<h2>A.1 Claude Code 内置</h2>
+
+<pre><code>/clear                    清空上下文,开新任务
+/compact                  压缩历史,省 token
+/model                    切换模型档位
+/resume                   恢复会话
+Shift+Tab                 计划模式/权限模式切换
+Esc / 双击 Esc             打断 / 回退到历史消息重新指挥
+@文件名                    精确引用文件
+claude -p "..."           非交互模式(脚本调用)</code></pre>
+
+<h2>A.2 OMC 技能速查(oh-my-claudecode:)</h2>
+
+<table>
+<tr><th>技能</th><th>一句话用途</th></tr>
+<tr><td>plan</td><td>规划:调研并产出可执行计划</td></tr>
+<tr><td>execute</td><td>执行:按计划实现并验证</td></tr>
+<tr><td>review</td><td>审查:独立上下文 code-reviewer</td></tr>
+<tr><td>verify</td><td>验证:证据确认"真的做完了"</td></tr>
+<tr><td>autopilot</td><td>全自动驾驶:目标进,结果出</td></tr>
+<tr><td>ralph</td><td>循环直到完成(可配置审查者)</td></tr>
+<tr><td>ultragoal</td><td>持久多目标台账(.omc/ultragoal)</td></tr>
+<tr><td>team</td><td>N 个 Agent 协同共享任务列表</td></tr>
+<tr><td>research</td><td>有出处的调研报告</td></tr>
+<tr><td>trace / debug</td><td>证据驱动的调试与调用链追踪</td></tr>
+<tr><td>deep-interview/ralplan</td><td>需求澄清后规划</td></tr>
+<tr><td>deepinit</td><td>分层 AGENTS.md 文档树生成</td></tr>
+<tr><td>remember</td><td>知识分类决策(记忆/wiki/技能)</td></tr>
+<tr><td>skillify</td><td>把会话流程固化成技能</td></tr>
+<tr><td>wiki</td><td>持久 markdown 知识库</td></tr>
+<tr><td>tdd</td><td>测试先行,在预定接缝处</td></tr>
+<tr><td>ai-slop-cleaner</td><td>清理 AI 生成的冗余代码</td></tr>
+<tr><td>cancel</td><td>取消任何 OMC 模式</td></tr>
+<tr><td>omc-setup / omc-doctor</td><td>安装刷新 / 安装诊断</td></tr>
+</table>
+
+<h2>A.3 OMC 状态根(.omc/)地图</h2>
+
+<pre><code>.omc/
+├── state/         编排模式进行时状态(可恢复)
+├── plans/         计划文档
+├── research/      调研产物
+├── logs/          日志
+├── artifacts/     产物(本 EPUB 源文件也在这里)
+├── handoffs/      会话交接
+├── notepad.md     分区工作笔记
+├── project-memory.json  结构化项目记忆
+└── wiki/          持久知识库</code></pre>
+
+</section>
+</main>
+</div>
+</body>
+</html>
