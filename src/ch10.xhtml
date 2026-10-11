@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="utf-8"/><title>第 10 章</title></head>
+<body>
+<h1>第 10 章 实战：从需求到交付的完整演练</h1>
+
+<p>用一个贴近本书写作环境的例子串起全书：给一个 Unity 手游客户端加"聊天撤回"功能。例子中的技术点来自真实项目的 CLAUDE.md 约定。</p>
+
+<h2>10.1 需求 → 委派指令</h2>
+
+<p>产品说"加个消息撤回"。直接转述给 AI 是反模式。先按四要素翻译成委派指令：</p>
+
+<pre><code>功能: 聊天系统加"撤回消息",发出后 2 分钟内可撤回。
+约束:
+- 遵守项目 CLAUDE.md 的 MVVM 三件套(InitVM/InitBinds/InitEvents)
+- 不改 UI 布局文件,只改 Lua 逻辑层
+验收:
+- 发消息→撤回→对方不再显示,本地服务自测通过
+- luacheck 无新增告警
+执行方式:
+- 非琐碎改动: 先 plan 后 execute
+- review 走独立上下文的 code-reviewer</code></pre>
+
+<p>注意两点：<strong>约束里直接引用 CLAUDE.md 的已有约定</strong>(不用重新解释)；<strong>验收里写明复现路径</strong>。</p>
+
+<h2>10.2 plan 阶段</h2>
+
+<p>切换计划模式(或 <code>/oh-my-claudecode:plan</code>)。AI 探索代码库后给出方案：</p>
+
+<ul>
+<li>聊天 UI 在 <code>UI/Chat/UIChatMain.lua</code>,消息数据在 <code>_G.Root.Chat</code>,撤回需要客户端标记 + 服务器广播；</li>
+<li>方案：协议加撤回请求/广播 → Mediator 处理 → VM 标记消息状态 → UI 订阅变化刷新列表。</li>
+</ul>
+
+<p>你审方案的三件事：目标对不对、边界清不清、验证方式是否可信。确认后进入执行。</p>
+
+<h2>10.3 execute 阶段</h2>
+
+<p><code>/oh-my-claudecode:execute</code>。executor 按计划实现：</p>
+
+<ol>
+<li>协议层：撤回请求 + 广播消息定义；</li>
+<li>Mediator：<code>_G.MediatorChat:RecallMessage(msgId)</code>，更新 <code>_G.Root.Chat</code>；</li>
+<li>UI 层：UIChatMain 订阅消息变更，撤回的条目渲染为提示文案。</li>
+</ol>
+
+<p>每步要求验证证据。执行中发现协议字段和服务器对不上，AI 停下来报告而不是硬编——这正是 3.3 节"先想后做"约定的作用。</p>
+
+<h2>10.4 review + verify 阶段</h2>
+
+<p>code-reviewer 在独立上下文里审出两个问题：</p>
+
+<ul>
+<li>撤回计时器没用 <code>self:StartTimer</code>，普通 <code>_G.Timer.Add</code> 在 UI 关闭后不会自动清理 → major；</li>
+<li>本地化文案 <code>_L("CHAT_RECALL")</code> 没检查是否带格式参数 → minor。</li>
+</ul>
+
+<p>executor 修复后复审通过。verifier 汇报验证证据：luacheck 零告警、自测录像/截图、边界用例(恰好在 2 分钟边缘撤回)。</p>
+
+<p>你验收后提交：</p>
+
+<pre><code>git add -p   # 逐块检查,只提交本功能相关改动
+git commit   # "聊天: 新增消息撤回功能"</code></pre>
+
+<h2>10.5 交付后:沉淀</h2>
+
+<p>收尾不是提交完就完。按第 8 章标准做沉淀：</p>
+
+<ul>
+<li>过程中"配置表必须先改 Excel 再导出"说到了第二遍 → 写入项目记忆/CLAUDE.md；</li>
+<li>排障 35 分钟的"撤回广播与重连时序问题" → 写一页 wiki debugging 复盘;</li>
+<li>"日报流程"已经手工走过三遍 → 下次用 skillify 固化。</li>
+</ul>
+
+<h2>10.6 复盘:本次指挥的得失</h2>
+
+<table>
+<tr><th>做得好</th><th>因为</th></tr>
+<tr><td>四要素指令 + 关卡确认</td><td>方向错误为零,返工只有一次小修</td></tr>
+<tr><td>review 走独立上下文</td><td>抓到了作者自己看不见的清理类问题</td></tr>
+<tr><td>要求验证证据</td><td>没有依赖"AI 自称完成"</td></tr>
+<tr><th>可以更好</th><th>因为</th></tr>
+<tr><td>验收里漏了"重连后撤回状态正确"用例</td><td>边界用例在 review 阶段才补上</td></tr>
+</table>
+
+</body>
+</html>
