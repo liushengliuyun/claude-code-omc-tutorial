@@ -27,15 +27,13 @@
 - `ClaudeCodeTutorial.epub` — 成品电子书（EPUB 3，可直接导入阅读器）
 - `src/` — 各章节 XHTML 源文件 + 样式表
 - `build_epub.py` — 打包脚本（纯标准库，`python build_epub.py` 重新生成 EPUB）
-- `packaging/` — 舟氏AI启航包构建工程（installer.iss / build.ps1 / 打包文档 / 中文语言包 / 官方 install.ps1 参考副本）
 
 ## 阅读
 
 - **在线阅读（推荐）**：https://liushengliuyun.github.io/claude-code-omc-tutorial/ （GitHub Pages，左侧目录导航）
 - **番外篇**：[CC Switch 指南 — 给 Claude Code 换发动机](https://liushengliuyun.github.io/claude-code-omc-tutorial/cc-switch.html)（作用/使用说明/买 Key/配 Key，DeepSeek 按量付费）
 - **EPUB 下载**：`ClaudeCodeTutorial.epub` — 用任意 EPUB 阅读器打开（内置目录索引 + NCX 兼容旧阅读器）
-- **[Releases](https://github.com/liushengliuyun/claude-code-omc-tutorial/releases)**：v1.0 挂载「舟氏AI启航包」`ZhouAI-StarterPack.exe`（Claude Code + Warp + CC Switch 离线一键安装，免代理直连下载，慢时用 Release 正文里的镜像链接）
-- **打包过程**：[packaging/PACKAGING.md](packaging/PACKAGING.md) — 安装包如何制作 / 复现 / 更新（版本矩阵、下载直链、离线自安装原理、一键构建脚本）
+- **[Releases](https://github.com/liushengliuyun/claude-code-omc-tutorial/releases)**：v1.0（舟氏AI启航包暂未挂载，受本机网络上传限制，如需获取请联系作者）
 
 ## 番外：CC Switch + 国内按量付费模型（DeepSeek 示例）
 
