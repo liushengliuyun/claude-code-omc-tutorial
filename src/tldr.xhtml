@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="utf-8"/><title>速读版</title></head>
+<body>
+<h1>速读版：全书浓缩成十条最佳实践</h1>
+
+<p>没时间读全书？照着下面十条做，就能拿到这本书八成的收益。每条末尾括号里是展开讲的章节，遇到问题再回去翻。</p>
+
+<ol>
+<li><strong>把它当"每天失忆的聪明同事"。</strong>它很聪明，但不记得你的项目和昨天说过的约定。要紧的事写进 CLAUDE.md 和记忆，不要每次口头重说。（第 1、4 章）</li>
+
+<li><strong>委派，不要问答。</strong>一条合格的指令 = 目标 + 约束 + 验收标准 + 执行方式。"帮我优化一下"是反模式。（第 3 章）</li>
+
+<li><strong>验收标准是自动化的地基。</strong>写成机器可判定："luacheck 通过、复现路径不再出错"，而不是"做好点"。验收越明确，AI 越能自己循环到达标，你越不用盯。（第 3、7 章）</li>
+
+<li><strong>非琐碎改动，先计划后动手。</strong>计划模式（Shift+Tab）或 OMC plan 出方案；你确认的是方向和边界，不是细节。计划未确认，不许写代码。（第 6 章）</li>
+
+<li><strong>减少打扰，从权限自动化开始。</strong>日常用 <code>claude --permission-mode auto</code> 起步，高频命令加白名单（.claude/settings.json 的 permissions.allow）；<code>--dangerously-skip-permissions</code> 只在容器或虚拟机里用。（第 2 章、附录 A.2）</li>
+
+<li><strong>作者不许自审，完成必须给证据。</strong>review 交给独立上下文的 code-reviewer；verify 要测试输出、构建日志，不信"我觉得完成了"。（第 5、6 章）</li>
+
+<li><strong>方向错了立刻 Esc。</strong>打断比返工便宜；双击 Esc 回退到走偏的那条消息，从那里重新指挥。（第 2 章）</li>
+
+<li><strong>边界清晰就放权。</strong>验收可自动化的任务交给 autopilot / ralph 无人值守；放行前保证 git 工作区干净，出问题整体回滚。自动化程度跟着回滚能力走。（第 7 章）</li>
+
+<li><strong>第二遍记忆、30 分钟复盘、第三遍技能化。</strong>解释到第二遍，写进记忆或 CLAUDE.md；排障超 30 分钟，wiki 复盘一页；同一流程走第三遍，skillify 固化成技能。（第 8、9 章）</li>
+
+<li><strong>上下文是唯一货币。</strong>给文件路径让它自己查，别贴几千行日志；新任务 /clear 开新会话，历史太长 /compact。（第 1、2 章）</li>
+</ol>
+
+<h2>日常工作流（一句话版）</h2>
+
+<pre><code>说清目标+验收 → 确认计划 → 放手执行(auto 模式+白名单) → 看证据验收 → 值得记的沉淀下来</code></pre>
+
+<p>全书就是这十条的展开：第 1-4 章讲"指挥与记忆"，第 5-7 章讲"编排与自动化"，第 8-9 章讲"沉淀与进化"，第 10 章是一次完整演练。</p>
+
+</body>
+</html>
