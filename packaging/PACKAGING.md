@@ -162,6 +162,7 @@ gh release upload v1.0 "D:\ZhouAI-StarterPack-build\ZhouAI-StarterPack.exe" --cl
 ```
 
 - 上传走 `uploads.github.com` **直连且快**（214 MB 约 1 分钟）
+- **直连可能被掐（见 §9 坑 2）**：报 `wsasend: Access is denied` 时改走代理 `HTTPS_PROXY=http://127.0.0.1:<FlClash端口> gh release upload ...`，或换一台网络正常的机器上传
 - **GitHub Release 附件不支持中文文件名**：上传接口与 PATCH 改名接口都会剥离非 ASCII 字符（`舟氏AI启航包.exe` → `AI.exe`），URL query 带原始 UTF-8 字节直接 400。所以产物名用英文：`ZhouAI-StarterPack.exe`
 - 中文 release notes 用 `gh release edit --notes-file <UTF-8文件>`，不要走命令行参数传中文
 
@@ -171,3 +172,31 @@ gh release upload v1.0 "D:\ZhouAI-StarterPack-build\ZhouAI-StarterPack.exe" --cl
 2. 有新版 → 下载/复制对应 payload，替换 `payload/` 下文件，改 installer.iss 顶部的 `#define` 版本号与注释里的 SHA256
 3. 重新 `ISCC.exe installer.iss`，上传 `--clobber` 覆盖
 4. 同步更新本文档第 0 节的版本矩阵和 Release notes
+
+**换机器上传清单**（本机 uploads.github.com 被墙时）：把 `packaging\ZhouAI-StarterPack.exe` 拷到能传的机器上，登好 `gh`，然后：
+
+```bash
+gh release upload v1.0 ZhouAI-StarterPack.exe --clobber
+gh release edit v1.0 --notes-file release-notes.md   # 中文说明必须走 UTF-8 文件, 命令行传参必乱码
+```
+
+## 9. 踩坑记录（2026-10-12 v1.2 修复实录）
+
+**坑 1：隐藏自装静默失败（v1.1 的核心缺陷）**
+- 现象：装完 pack 后 `~\.local\bin` 没有 claude.exe、pack 安装目录也没有、PATH 无变化，安装器却照样报成功
+- 根因：`[Run]` 以 `runhidden` 执行 `claude.exe install <版本>`，该步骤在部分机器上失败——无任何输出，Inno 也不中断
+- 修复：v1.2 改直接落盘 `{app}\bin` + `[Code]` 写 PATH（第 4 节），并编译 claude-only 测试包实测装/卸全链路（落盘 ✓ PATH 注入 ✓ `claude --version` ✓ 卸载后 PATH 条目精确移除、其余条目原样保留 ✓）
+- 排查口诀：判断装没装，只看 `claude --version` 通不通；pack 安装目录有没有 claude.exe 不再是判据（v1.2 起有，v1.1 起本就不放）
+
+**坑 2：Release 上传大附件被墙（网络会漂移）**
+- `gh release upload` 直连报 `wsasend: Access is denied`（前一天打包时同域名直连还正常）→ 解法见第 7 节
+- `git push` 走 github.com：本机直连报 `getsockname() failed with errno 10022`，必须 `git -c http.https://github.com.proxy=http://127.0.0.1:<端口> push`
+
+**坑 3：FlClash 代理端口会漂移**
+- 不是固定 7892，本次实测监听 7890；用前 `netstat -ano | findstr FlClashCore的PID` 确认实际端口
+
+**坑 4：Inno 6.4 产物解不开**
+- innoextract 1.9 / innounp 0.50 / 7-Zip 26.02 全部无法解包（报 incompatible version）→ 想从已发布的 exe 里取回 payload 没有捷径，构建时的 `payload/` 目录务必本地留档（已被 .gitignore 排除，不会误提交）
+
+**坑 5：claude.exe 的免代理获取通道**
+- npm 包 `@anthropic-ai/claude-code` 里的 `bin\claude.exe` 与官方原生二进制一致（2.1.296 实测 SHA256 = `76de74f7…` 与官方 manifest 完全相同），npmmirror 国内直连可下 → downloads.claude.ai 被墙时的首选 payload 来源，全程免代理
