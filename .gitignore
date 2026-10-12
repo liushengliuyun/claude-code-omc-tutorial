@@ -1,0 +1,6 @@
+# 构建产物与本地 payload(按 PACKAGING.md 现场拉取)
+packaging/payload/
+packaging/ZhouAI-StarterPack.exe
+packaging/ZhouAI-PathTest.exe
+# OMC 本地状态
+.omc/

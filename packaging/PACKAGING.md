@@ -4,7 +4,7 @@
 >
 > **免代理原则：** 查版本、下载 Warp / CC Switch、编译、上传 GitHub Release 全部国内直连可用；只有获取 claude.exe（本机版本落后时）才需要代理。
 >
-> **当前版本矩阵（2026-10-11 打包 v1.1）：**
+> **当前版本矩阵（2026-10-12 打包 v1.2）：**
 >
 > | 组件 | 版本 |
 > |---|---|
@@ -113,15 +113,22 @@ URL=https://liushengliuyun.github.io/claude-code-omc-tutorial/
 IconIndex=0
 ```
 
-## 4. 离线自安装原理（核心，已实测）
+## 4. 部署原理（核心，已实测）
 
-| 组件 | 安装命令（Inno `[Run]` 段执行） | 离线验证 |
+| 组件 | 部署方式（Inno `[Files]` / `[Run]` 段） | 说明 |
 |---|---|---|
-| Claude Code | `claude.exe install <版本>` | 在 downloads.claude.ai 被墙的机器上实测：安装命令纯本地自复制（二进制把自己拷进 `%USERPROFILE%\.local\bin` 并布置 launcher / PATH），**不访问网络**，秒装成功 |
+| Claude Code | **直接落盘** `{app}\bin\claude.exe` + `[Code]` 把 `{app}\bin` 追加进用户 PATH | 二进制即整个程序，落盘即用；卸载时自动移除 PATH 条目 |
 | Warp | `WarpSetup.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART` | Inno 标准静默参数，winget 清单 `InstallerType: inno` |
 | CC Switch | `msiexec /i <msi> /qb /norestart` | 标准 MSI；选 `/qb` 而非 `/qn`：基本 UI 带进度条，必要时能弹 UAC |
 
-安装顺序：Claude Code → Warp → CC Switch，全部静默，装完即用。payload 全部 `deleteafterinstall`，装完自动清理临时目录。
+安装顺序：Claude Code（文件直拷）→ Warp → CC Switch，全部静默，装完即用。Warp / CC Switch 的 payload 走 `{tmp}` 且 `deleteafterinstall`，装完自动清理临时目录；claude.exe 持久保留在安装目录。
+
+**v1.1 → v1.2 变更（为什么放弃「claude.exe install 自装」）：**
+
+- v1.1 用 `[Run]` 隐藏执行 `claude.exe install <版本>` 让二进制自装进 `%USERPROFILE%\.local\bin`。实测在部分机器上该步骤**静默失败**（`runhidden` 无任何输出，Inno 不中断、照样显示安装成功），且 pack 安装目录里看不到 claude.exe，用户无法判断装没装上；
+- v1.2 起 claude.exe 直接安装到本包目录 `{localappdata}\ZhouAI-StarterPack\bin\claude.exe`，并把该目录**追加**进用户 PATH（条目级精确匹配防重复；`ChangesEnvironment=yes` 让安装/卸载自动广播 `WM_SETTINGCHANGE`，免重启生效）；
+- 卸载时按条目移除 PATH 中的 `{app}\bin` 并重建（顺带清理空段），其余 PATH 内容原样保留；
+- 代价与取舍：`claude update` 自更新装进 `~\.local\bin` 时，PATH 中两者并存——本包目录条目**追加在末尾**，不遮蔽官方安装；更新本包覆盖即可升级内置版本。
 
 ## 5. Inno 脚本要点（installer.iss）
 
@@ -133,6 +140,7 @@ printf '\xef\xbb\xbf' > /tmp/bom && cat installer.iss >> /tmp/bom && mv /tmp/bom
 ```
 
 - `PrivilegesRequired=lowest`：普通用户权限，无需管理员
+- `ChangesEnvironment=yes` + `[Code]`：安装时把 `{app}\bin` 追加进 `HKCU\Environment\Path`（已含同条目则跳过），卸载时按条目移除；Inno 自动广播环境变量变更
 - `Compression=lzma2/max` + `SolidCompression=yes`：411 MB payload → 236 MB 产物，48 秒编完
 - `ShowLanguageDialog=no` + `[Languages]` 只留 zh → 全中文安装界面
 - 桌面放教程快捷方式（.url），开始菜单留教程入口
