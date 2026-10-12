@@ -12,6 +12,7 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ClaudeCodeTutori
 # (file, toc title)
 SPINE = [
     ("cover.xhtml", "封面"),
+    ("tldr.xhtml", "速读版：十条最佳实践"),
     ("preface.xhtml", "前言"),
     ("ch01.xhtml", "第 1 章 心智模型"),
     ("ch02.xhtml", "第 2 章 Claude Code 快速上手"),
@@ -27,7 +28,7 @@ SPINE = [
 ]
 
 TITLE = "指挥AI的艺术：用 Claude Code + OMC 打造持续学习与进化的智能工作流"
-MODIFIED = "2026-10-11T00:00:00Z"
+MODIFIED = "2026-10-12T00:00:00Z"
 
 
 def build():
