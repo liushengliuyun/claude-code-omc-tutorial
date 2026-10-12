@@ -778,7 +778,40 @@ Esc / 双击 Esc             打断 / 回退到历史消息重新指挥
 @文件名                    精确引用文件
 claude -p "..."           非交互模式(脚本调用)</code></pre>
 
-<h2>A.2 OMC 技能速查(oh-my-claudecode:)</h2>
+<h2>A.2 减少打扰:提升自动化,少跟 AI 来回确认</h2>
+
+<p>很多文章提到 <code>claude --auto</code> —— 这个指令<b>并不存在</b>,准确写法是 <code>claude --permission-mode auto</code>。下面按"放权程度"从轻到重排列:越往下越自动、打扰越少,也越需要你信任运行环境。</p>
+
+<pre><code># 1. 权限模式(放权程度从轻到重)
+claude --permission-mode manual             # 手动:每个新操作都询问(默认)
+claude --permission-mode acceptEdits        # 自动接受文件编辑 + mkdir/mv/cp 等
+claude --permission-mode auto               # 自动模式:低风险操作直接放行,
+                                            #   危险命令/联网等风险操作由后台分类器
+                                            #   审核是否与你的请求一致
+claude --permission-mode bypassPermissions  # 跳过全部权限检查
+
+# 2. 一路狂奔(危险,只建议在容器/虚拟机等隔离环境使用)
+claude --dangerously-skip-permissions
+
+# 3. 会话内随时切换,不用重启
+Shift+Tab                              # 循环切换 手动 → 自动编辑 → 计划 模式
+/permissions                           # 可视化管理 allow / ask / deny 规则
+权限弹窗选 "Yes, and don't ask again"   # 该命令永久放行,写入 .claude/settings.local.json
+
+# 4. 白名单:精确放行高频命令(日常推荐)
+# 项目 .claude/settings.json 里配置:
+#   { "permissions": {
+#       "allow": ["Bash(npm run *)", "Bash(git commit *)"],
+#       "deny":  ["Bash(git push *)"] } }
+# 临时放行: claude --allowedTools "Bash(npm run *)"
+
+# 5. 无人值守:脚本 / CI 里跑
+claude -p "跑通测试并修复失败项" --permission-mode acceptEdits
+claude -c                              # 继续最近一次会话,不用重新交代背景</code></pre>
+
+<p><b>推荐组合</b>:日常用 <code>auto</code> 模式起步,配合白名单放行高频命令,把推送/删除类操作留在 deny 名单;工作区干净、有测试兜底时再逐步放权;只有容器或一次性虚拟机里才用 <code>--dangerously-skip-permissions</code>。放权越多,AI 打扰越少,但出错时的破坏半径也越大——自动化程度应该跟着你的回滚能力走。OMC 侧的无人值守编排(autopilot / ralph / ultragoal,见第 7 章)与权限模式正交:权限决定"敢让它干什么",编排模式决定"它自己走多远"。</p>
+
+<h2>A.3 OMC 技能速查(oh-my-claudecode:)</h2>
 
 <table>
 <tr><th>技能</th><th>一句话用途</th></tr>
@@ -803,7 +836,7 @@ claude -p "..."           非交互模式(脚本调用)</code></pre>
 <tr><td>omc-setup / omc-doctor</td><td>安装刷新 / 安装诊断</td></tr>
 </table>
 
-<h2>A.3 OMC 状态根(.omc/)地图</h2>
+<h2>A.4 OMC 状态根(.omc/)地图</h2>
 
 <pre><code>.omc/
 ├── state/         编排模式进行时状态(可恢复)
