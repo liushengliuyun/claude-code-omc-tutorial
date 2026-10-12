@@ -9,6 +9,7 @@ OUT = os.path.join(BASE, "docs", "index.html")
 
 CHAPTERS = [
     ("cover", "封面"),
+    ("tldr", "速读版：十条最佳实践"),
     ("preface", "前言：从“敲代码的助手”到“可指挥的团队”"),
     ("ch01", "第 1 章 心智模型：AI 是一个失忆的聪明同事"),
     ("ch02", "第 2 章 Claude Code 快速上手"),
